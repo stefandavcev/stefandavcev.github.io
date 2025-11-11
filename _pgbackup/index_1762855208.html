@@ -129,7 +129,12 @@
                                 <div class="menu-promo__content"> 
                                     <p class="menu-promo__caption menu-fade-in">👋 Nice to see you!<br>I'm Stefan Davchev, Creative Digital Designer based in Shtip, N. Macedonia</p> 
                                     <div class="menu-promo__video"> 
-</div>                                     
+                                        <video class="menu-video" id="inner-video" preload="auto" autoplay="autoplay" loop="loop" muted="muted" poster="https://dummyimage.com/540x310/5d5d5d/737373"> 
+                                            <source type="video/mp4" src="video/540x310_video.mp4"> 
+                                            <source type="video/webm" src="video/540x310_video.webm"> 
+                                            <source type="video/ogv" src="video/540x310_video.ogv"> 
+                                        </video>                                         
+                                    </div>                                     
                                 </div>                                 
                             </div>                             
                         </div>                         
@@ -235,13 +240,13 @@
                             </div>                             
                             <div class="hero-09-objects__item item-01 loading__item"> 
                                 <div class="mxd-counter horizontal"> 
-                                    <p id="stats-counter-1" class="mxd-counter__number mxd-stats-number xsmall">3+</p> 
+                                    <p id="stats-counter-1" class="mxd-counter__number mxd-stats-number xsmall">0</p> 
                                     <p class="mxd-counter__descr t-140 t-bright t-small">Years of<br>experience</p> 
                                 </div>                                 
                             </div>                             
                             <div class="hero-09-objects__item item-02 loading__item"> 
                                 <div class="mxd-counter horizontal"> 
-                                    <p id="stats-counter-2" class="mxd-counter__number mxd-stats-number xsmall">20+</p> 
+                                    <p id="stats-counter-2" class="mxd-counter__number mxd-stats-number xsmall">0</p> 
                                     <p class="mxd-counter__descr t-140 t-bright t-small">Successful<br>projects</p> 
                                 </div>                                 
                             </div>                             
@@ -803,7 +808,7 @@
         <!-- counters -->         
         <script>
       const statsCounter1 = new countUp.CountUp("stats-counter-1", 3, optionsPlus);
-      const statsCounter2 = new countUp.CountUp("stats-counter-2", 20, optionsPlus);
+      const statsCounter2 = new countUp.CountUp("stats-counter-2", 70, optionsPlus);
       statsCounter1.start();
       statsCounter2.start();
     </script>         
