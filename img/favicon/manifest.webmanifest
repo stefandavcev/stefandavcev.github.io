@@ -2,7 +2,7 @@
   "name": "Stefan Davchev - Portfolio",
   "short_name": "SD",
   "icons": [
-    { "src": "/img/favicon/aicon.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/img/favicon/icon.png", "type": "image/png", "sizes": "192x192" },
     { "src": "/img/favicon/icon.png", "type": "image/png", "sizes": "512x512" }
   ],
   "theme_color": "#efefef",
