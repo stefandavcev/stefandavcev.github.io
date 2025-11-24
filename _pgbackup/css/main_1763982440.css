@@ -1454,41 +1454,6 @@ html.lenis body {
     }
 }
 
-/* --- NEW BREAKPOINT TO FIX 125% SCALING ISSUE (Effective 1536px) --- */
-@media only screen and (min-width: 1400px) and (max-width: 1599px) {
-    /* Reduce the padding to something manageable for screens just under 1600px */
-    .mxd-container {
-        padding: 0 7rem;
-
-        /* Reduced from 9rem */
-    }
-
-    /* Apply similar reductions to other key containers if needed */
-    .mxd-container.grid-container {
-        padding: 0 5.5rem;
-
-        /* Reduced from 7.5rem */
-    }
-
-    .mxd-container.grid-l-container {
-        padding: 0 3.5rem;
-
-        /* Reduced from 4.5rem */
-    }
-}
-
-/* ----------------------------------------------------------------- */
-@media only screen and (min-width: 1600px) {
-    /* ORIGINAL 1600px STYLES HERE */
-    .mxd-container {
-        padding: 0 9rem;
-
-        /* This large padding is now only for truly huge screens */
-    }
-
-    /* ... rest of your 1600px query ... */
-}
-
 @media only screen and (min-width: 1600px) {
     .mxd-container {
         padding: 0 9rem;
