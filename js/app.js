@@ -66,7 +66,7 @@ gsap.registerPlugin(Flip);
 const content = document.querySelector('body');
 const imgLoad = imagesLoaded(content);
 const loadingWrap = document.querySelector('.loading-wrap');
-const loadingItems = loadingWrap.querySelectorAll('.loading__item');
+const loadingItems = loadingWrap ? loadingWrap.querySelectorAll('.loading__item') : [];
 const fadeInItems = document.querySelectorAll('.loading__fade');
 
 function startLoader() {

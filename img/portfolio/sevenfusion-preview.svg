@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101010"/><stop offset="1" stop-color="#242424"/></linearGradient>
+        <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ed5d32"/><stop offset="1" stop-color="#6c2027"/></linearGradient>
+        <filter id="shadow"><feDropShadow dx="0" dy="30" stdDeviation="30" flood-opacity=".35"/></filter>
+      </defs>
+      <rect width="1600" height="1000" fill="url(#bg)"/>
+      <circle cx="150" cy="140" r="230" fill="#ed5d32" opacity=".08"/><circle cx="1500" cy="930" r="340" fill="#6c2027" opacity=".07"/>
+      <rect x="105" y="110" width="1390" height="780" rx="34" fill="#f7f6f2" filter="url(#shadow)"/>
+      <rect x="105" y="110" width="1390" height="72" rx="34" fill="#deddd8"/>
+      <circle cx="155" cy="146" r="11" fill="#ff605c"/><circle cx="190" cy="146" r="11" fill="#ffbd44"/><circle cx="225" cy="146" r="11" fill="#00ca4e"/>
+      <rect x="270" y="130" width="620" height="32" rx="16" fill="#c9c7c1"/>
+      <rect x="170" y="230" width="570" height="56" rx="12" fill="#ed5d32" opacity=".16"/>
+      <text x="170" y="385" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="800" fill="#161616">SEVEN FUSION</text>
+      <text x="175" y="440" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#565656">Restaurant website experience</text>
+      <rect x="175" y="520" width="255" height="64" rx="32" fill="url(#a)"/>
+      <text x="220" y="562" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#fff">WORDPRESS PROJECT</text>
+      <rect x="175" y="655" width="520" height="18" rx="9" fill="#cbc9c2"/><rect x="175" y="700" width="430" height="18" rx="9" fill="#d8d6d0"/><rect x="175" y="745" width="480" height="18" rx="9" fill="#d8d6d0"/>
+      
+        <circle cx="1165" cy="470" r="190" fill="#ed5d32" opacity=".18"/>
+        <circle cx="1165" cy="470" r="125" fill="#fff5e7"/>
+        <path d="M1075 465c80-115 185-90 210 15-92 79-185 67-210-15z" fill="#ed5d32"/>
+        <circle cx="1140" cy="445" r="22" fill="#6c2027"/><circle cx="1190" cy="490" r="18" fill="#5f9f55"/><circle cx="1232" cy="438" r="17" fill="#f6c453"/>
+        <path d="M1325 325v300M1360 325v300" stroke="#6c2027" stroke-width="12" stroke-linecap="round"/>
+        
+      <text x="125" y="955" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#fff" opacity=".7">Stefan Davchev - selected work</text>
+    </svg>

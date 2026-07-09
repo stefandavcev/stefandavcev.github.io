@@ -4,7 +4,7 @@
 
 # @phosphor-icons/web
 
-Phosphor is a flexible icon family for interfaces, diagrams, presentations — whatever, really. Explore all our icons at [phosphoricons.com](https://phosphoricons.com).
+Phosphor is a flexible icon family for interfaces, diagrams, presentations - whatever, really. Explore all our icons at [phosphoricons.com](https://phosphoricons.com).
 
 [![NPM](https://img.shields.io/npm/v/@phosphor-icons/web.svg?style=flat-square)](https://www.npmjs.com/package/@phosphor-icons/web) [![Travis](https://img.shields.io/travis/com/phosphor-icons/web.svg?style=flat-square)](https://travis-ci.com/github/phosphor-icons/web)
 

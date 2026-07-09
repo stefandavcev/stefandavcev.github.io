@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#171717"/><stop offset="1" stop-color="#333"/></linearGradient></defs>
+    <rect width="1200" height="900" fill="url(#g)"/>
+    <circle cx="410" cy="340" r="260" fill="#ff8b4d" opacity=".22"/>
+    <rect x="130" y="120" width="940" height="660" rx="48" fill="#f3f1ec"/>
+    <rect x="205" y="205" width="390" height="35" rx="17" fill="#ff8b4d" opacity=".85"/>
+    <rect x="205" y="295" width="680" height="92" rx="20" fill="#161616"/>
+    <rect x="205" y="430" width="380" height="24" rx="12" fill="#bdbbb4"/>
+    <rect x="205" y="478" width="540" height="24" rx="12" fill="#d0cec8"/>
+    <rect x="205" y="526" width="490" height="24" rx="12" fill="#d0cec8"/>
+    <circle cx="895" cy="530" r="105" fill="#ff8b4d"/>
+    <text x="205" y="690" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="800" fill="#161616">CONTENT</text>
+    </svg>
