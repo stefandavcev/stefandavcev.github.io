@@ -284,8 +284,7 @@
                                                                 <span class="sd-browser-dots"></span>
                                                                 <span class="sd-browser-address">kadrievi.be/</span>
                                                             </div>
-                                                            <div class="sd-browser-screen sd-video-shell">
-                                                                <img class="sd-video-poster" src="img/portfolio/kadrievi-scroll-poster.webp" alt="" aria-hidden="true"/>
+                                                            <div class="sd-browser-screen">
                                                                 <video class="sd-project-video" autoplay muted loop playsinline preload="auto" poster="img/portfolio/kadrievi-scroll-poster.webp" aria-label="Scrolling preview of the Kadrievi website">
                                                                     <source src="video/kadrievi-scroll.webm" type="video/webm"/>
                                                                     <source src="video/kadrievi-scroll.mp4" type="video/mp4"/>
@@ -317,8 +316,7 @@
                                                                 <span class="sd-browser-dots"></span>
                                                                 <span class="sd-browser-address">tipmtrans.mk/</span>
                                                             </div>
-                                                            <div class="sd-browser-screen sd-video-shell">
-                                                                <img class="sd-video-poster" src="img/portfolio/tip-m-trans-scroll-poster.webp" alt="" aria-hidden="true"/>
+                                                            <div class="sd-browser-screen">
                                                                 <video class="sd-project-video" autoplay muted loop playsinline preload="auto" poster="img/portfolio/tip-m-trans-scroll-poster.webp" aria-label="Scrolling preview of the TIP M Trans website">
                                                                     <source src="video/tip-m-trans-scroll.webm" type="video/webm"/>
                                                                     <source src="video/tip-m-trans-scroll.mp4" type="video/mp4"/>
@@ -744,6 +742,34 @@
       statsCounter2.start();
     </script>
         <!-- Load Scripts End -->
-        <script src="js/portfolio.js?v=4"></script>
+        <script src="js/portfolio.js"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".sd-project-video").forEach(function (video) {
+                video.muted = true;
+                video.defaultMuted = true;
+                video.setAttribute("muted", "");
+                video.playsInline = true;
+                video.setAttribute("playsinline", "");
+
+                function startPreview() {
+                    var playPromise = video.play();
+                    if (playPromise && typeof playPromise.catch === "function") {
+                        playPromise.catch(function () {
+                            /* The poster remains visible if the browser blocks autoplay. */
+                        });
+                    }
+                }
+
+                if (video.readyState >= 2) {
+                    startPreview();
+                } else {
+                    video.addEventListener("canplay", startPreview, { once: true });
+                    video.load();
+                }
+            });
+        });
+        </script>
+
     </body>
 </html>
