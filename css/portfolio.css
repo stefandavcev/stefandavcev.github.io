@@ -1372,3 +1372,356 @@
         transition: none;
     }
 }
+
+
+/* ================================================================
+   Mobile layout repair — homepage
+   Keeps the desktop experience unchanged and replaces the mobile
+   pinned-card behaviour with a clean, readable vertical layout.
+   ================================================================ */
+@media (max-width: 767px) {
+    html,
+    body,
+    .mxd-page-content,
+    .mxd-section,
+    .mxd-container,
+    .mxd-block {
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+
+    html,
+    body {
+        overflow-x: clip !important;
+    }
+
+    /* The large moving sentence was visually colliding with the cards. */
+    .mxd-section.padding-mtext-pre-stack {
+        padding-top: 3.5rem;
+        padding-bottom: 3rem;
+        overflow: hidden;
+    }
+
+    .padding-mtext-pre-stack .marquee__text {
+        font-size: 3.8rem;
+        line-height: 1;
+        letter-spacing: -.04em;
+    }
+
+    .padding-mtext-pre-stack .marquee__image {
+        width: 3.8rem;
+        height: 3.8rem;
+    }
+
+    /* Service cards: normal document flow on phones, no overlap/pinning. */
+    .mxd-section.padding-stacked-section {
+        padding-bottom: 8rem;
+    }
+
+    .stack-wrapper,
+    .services-stack {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        transform: none !important;
+    }
+
+    .stack-offset {
+        display: none !important;
+        height: 0 !important;
+    }
+
+    .services-stack {
+        display: flex !important;
+        flex-direction: column;
+        gap: 1.6rem;
+    }
+
+    .services-stack .stack-item {
+        position: relative !important;
+        inset: auto !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        z-index: auto !important;
+    }
+
+    .mxd-services-stack__inner,
+    .mxd-services-stack__inner.radius-dark {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 2.6rem 2.4rem 0 !important;
+        border-radius: 3rem !important;
+        justify-content: flex-start !important;
+    }
+
+    .mxd-services-stack__controls {
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .mxd-services-stack__controls .btn-round-large {
+        width: 5.8rem;
+        height: 5.8rem;
+        min-width: 5.8rem;
+    }
+
+    .mxd-services-stack__title,
+    .mxd-services-stack__title.width-60,
+    .mxd-services-stack__title.width-70 {
+        width: calc(100% - 6.8rem) !important;
+        max-width: none !important;
+        margin: 0 0 2.2rem !important;
+        padding: 0 !important;
+    }
+
+    .mxd-services-stack__title h3 {
+        font-size: clamp(4.1rem, 12vw, 5rem) !important;
+        line-height: .95;
+        letter-spacing: -.04em;
+    }
+
+    .mxd-services-stack__info,
+    .mxd-services-stack__info.width-60,
+    .mxd-services-stack__info.width-70 {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+    }
+
+    .mxd-services-cards__tags {
+        gap: .7rem;
+        margin-bottom: 2rem;
+    }
+
+    .mxd-services-cards__tags .tag {
+        font-size: 1.35rem;
+    }
+
+    .mxd-services-stack__info p {
+        font-size: 1.7rem;
+        line-height: 1.5;
+    }
+
+    .services-stack__image {
+        position: relative !important;
+        inset: auto !important;
+        display: flex !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 19rem !important;
+        min-height: 0 !important;
+        margin-top: 1.6rem;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    .services-stack__image .service-img.sd-service-visual,
+    .services-stack__image .service-img-s.sd-service-visual {
+        position: relative !important;
+        inset: auto !important;
+        display: block !important;
+        width: auto !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 19rem !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+        object-position: center bottom !important;
+        transform: none !important;
+        animation: none !important;
+        filter: drop-shadow(0 1.4rem 2.2rem rgba(0,0,0,.18));
+    }
+
+    .services-stack__image .service-img-m.sd-service-visual {
+        display: none !important;
+    }
+
+    /* Portrait divider: keep the badge away from the face. */
+    .mxd-section.padding-pre-title {
+        padding-bottom: 8rem;
+    }
+
+    .mxd-container__circle {
+        margin-bottom: -4.5rem;
+        padding-right: 1.2rem;
+        text-align: right;
+    }
+
+    .btn-rotating-blur-outline {
+        width: 12rem;
+        height: 12rem;
+    }
+
+    .btn-rotating-blur-outline .btn-rotating__image {
+        width: 4.8rem;
+    }
+
+    .mxd-divider,
+    .mxd-divider__image {
+        height: 42rem;
+    }
+
+    .divider-image-6 {
+        background-position: center top;
+    }
+
+    /* CTA: remove the decorative panel that covered the mobile copy. */
+    .mxd-promo {
+        overflow: hidden;
+        border-radius: 3rem;
+    }
+
+    .mxd-promo__inner {
+        min-height: 0;
+        padding: 0 2.4rem;
+        border-radius: 3rem;
+    }
+
+    .mxd-promo__bg,
+    .mxd-promo__images {
+        display: none !important;
+    }
+
+    .mxd-promo__content {
+        width: 100%;
+        gap: 3rem;
+        margin: 6rem 0;
+    }
+
+    .mxd-promo__title {
+        width: 100%;
+        max-width: none;
+    }
+
+    .mxd-promo__caption {
+        display: block;
+        max-width: 9ch;
+        font-size: clamp(4.2rem, 12.5vw, 5.4rem);
+        line-height: .98;
+        letter-spacing: -.045em;
+        overflow-wrap: normal;
+        word-break: normal;
+    }
+
+    .mxd-promo__controls,
+    .mxd-promo__controls .btn {
+        max-width: 100%;
+    }
+
+    .mxd-promo__controls .btn {
+        font-size: 1.9rem;
+    }
+
+    /* Footer: prevent long details and the CTA button from clipping. */
+    .mxd-footer__fullwidth-text {
+        padding: 8rem 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .sd-footer-wordmark {
+        max-width: 100%;
+        font-size: clamp(3.3rem, 12.5vw, 5rem);
+        line-height: 1;
+        letter-spacing: -.045em;
+        white-space: nowrap;
+    }
+
+    .mxd-footer__footer-blocks {
+        gap: 1.6rem;
+        padding: 0 2rem;
+    }
+
+    .footer-blocks__column {
+        gap: 1.6rem;
+        min-width: 0;
+    }
+
+    .footer-blocks__card {
+        min-width: 0;
+        gap: 2.2rem;
+        padding: 2.4rem;
+        border-radius: 2.4rem;
+    }
+
+    .footer-blocks__card .mxd-point-subtitle {
+        min-width: 0;
+        gap: .8rem;
+        font-size: 1.8rem;
+        line-height: 1.35;
+    }
+
+    .footer-blocks__card .mxd-point-subtitle a[href^="mailto:"] {
+        min-width: 0;
+        font-size: 1.65rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .sd-footer-cta .footer-blocks__title-m {
+        font-size: 3rem;
+        line-height: 1.12;
+    }
+
+    .sd-footer-cta > p {
+        font-size: 1.6rem;
+        line-height: 1.5;
+    }
+
+    .sd-footer-cta .btn {
+        width: 100%;
+        min-width: 0;
+        height: 5.4rem;
+        gap: .7rem;
+        padding: 0 1.5rem;
+        justify-content: space-between;
+        font-size: 1.72rem;
+        white-space: nowrap;
+    }
+
+    .sd-footer-cta .btn-caption {
+        min-width: 0;
+        white-space: nowrap;
+    }
+
+    .footer-blocks__title-l {
+        font-size: 3.6rem;
+        line-height: 1.1;
+    }
+
+    .footer-socials__link {
+        font-size: 2.4rem;
+    }
+
+    .sd-footer-location {
+        margin-top: 3rem;
+        font-size: 1.45rem;
+        line-height: 1.5;
+    }
+
+    .sd-footer-location p {
+        max-width: 100%;
+        overflow-wrap: normal;
+    }
+}
+
+@media (max-width: 767px) {
+    .btn-rotating-blur-outline .btn-rotating__text {
+        width: 10.8rem;
+        height: 10.8rem;
+        top: .6rem;
+        left: .6rem;
+    }
+
+    .sd-footer-location {
+        padding-right: 5.5rem;
+    }
+}
