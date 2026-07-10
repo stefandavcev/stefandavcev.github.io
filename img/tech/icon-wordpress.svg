@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="90" viewBox="0 0 120 90" role="img" aria-labelledby="title">
+  <title id="title">WordPress</title>
+  <rect x="15" y="0" width="90" height="90" rx="18" fill="#21759B"/>
+  <circle cx="60" cy="45" r="31" fill="none" stroke="#fff" stroke-width="4"/>
+  <path fill="#fff" d="M35 31h15v4h-3l8 24 6-17-3-7h-4v-4h17v4h-4l8 24 7-21c1-4-1-6-3-8 4 1 8 6 8 12 0 3-1 6-2 10L74 70h-6l-9-24-9 24h-6L32 35h-3v-4h6zm45 3c2 3 3 6 3 10 0 4-1 8-3 13l-6 17a31 31 0 0 0 6-40z"/>
+</svg>
