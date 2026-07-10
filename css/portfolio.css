@@ -836,43 +836,62 @@
     }
 }
 
-/* Live website previews - browser frame fills the project shape. */
+/* Featured-project previews: responsive 16:9 cards with video. */
+.mxd-pinned-projects .mxd-project-item__media {
+    height: auto;
+    margin-bottom: 2.2rem;
+}
+
+.mxd-pinned-projects .mxd-project-item__preview {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    justify-content: stretch;
+}
+
+.mxd-pinned-projects .mxd-project-item__tags {
+    position: static;
+    width: 100%;
+    padding: 1.4rem 0 0;
+}
+
 .sd-live-project-preview {
-    background: linear-gradient(145deg,#101010,#292929);
     padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(145deg,#101010,#292929);
     overflow: hidden;
 }
 
 .sd-browser-frame {
+    position: relative;
     width: 100%;
     height: 100%;
-    max-height: none;
-    border-radius: 2.2rem;
     overflow: hidden;
-    background: #f3f3f3;
-    box-shadow: 0 2.8rem 7rem rgba(0,0,0,.38);
     border: 1px solid rgba(255,255,255,.18);
-    display: flex;
-    flex-direction: column;
+    border-radius: 2rem;
+    background: #111;
+    box-shadow: 0 2.2rem 5rem rgba(0,0,0,.32);
 }
 
 .sd-browser-bar {
-    height: 4.6rem;
-    flex: 0 0 4.6rem;
-    background: #e8e8e8;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4.2rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 0 1.6rem;
-    border-bottom: 1px solid #d3d3d3;
+    gap: 1.3rem;
+    padding: 0 1.4rem;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    background: rgba(232,232,232,.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .sd-browser-dots,
-.sd-browser-dots:before,
-.sd-browser-dots:after {
+.sd-browser-dots::before,
+.sd-browser-dots::after {
     display: block;
     width: .9rem;
     height: .9rem;
@@ -882,22 +901,23 @@
 
 .sd-browser-dots {
     position: relative;
+    flex: 0 0 auto;
     margin-right: 2.4rem;
 }
 
-.sd-browser-dots:before,
-.sd-browser-dots:after {
+.sd-browser-dots::before,
+.sd-browser-dots::after {
     content: '';
     position: absolute;
     top: 0;
 }
 
-.sd-browser-dots:before {
+.sd-browser-dots::before {
     left: 1.5rem;
     background: #febc2e;
 }
 
-.sd-browser-dots:after {
+.sd-browser-dots::after {
     left: 3rem;
     background: #28c840;
 }
@@ -906,51 +926,42 @@
     min-width: 0;
     flex: 1;
     padding: .7rem 1.4rem;
+    overflow: hidden;
     border-radius: 1rem;
     background: #fff;
     color: #656565;
     font-size: 1.2rem;
+    line-height: 1;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .sd-browser-screen {
-    flex: 1;
-    min-height: 0;
-    background: #fff;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
+    background: #111;
 }
 
-.sd-browser-screen img {
+.sd-browser-screen img,
+.sd-browser-screen video {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    background: #fff;
+    background: #111;
 }
 
-@media (max-width:767px){
-    .sd-live-project-preview {
-        padding: .7rem;
-    }
+.sd-project-video {
+    pointer-events: none;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
 
-    .sd-browser-frame {
-        height: 100%;
-        border-radius: 1.4rem;
-    }
-
-    .sd-browser-bar {
-        height: 3.8rem;
-        flex-basis: 3.8rem;
-        padding: 0 1rem;
-    }
-
-    .sd-browser-address {
-        font-size: 1rem;
-        padding: .5rem .9rem;
-    }
+.sd-project-static {
+    filter: saturate(.94) contrast(1.02);
 }
 
 /* Services keeps the template's animated structure; these images must fill hover and promo frames cleanly. */
@@ -1155,3 +1166,154 @@
 .sd-cta .sd-eyebrow {
     color: #777777;
 }
+
+/* Homepage mobile review and responsive refinements. */
+.sd-menu-links a,
+.footer-blocks__card a,
+.footer-blocks__card p,
+.mxd-project-item__name a {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .hero-09-headline__caption p {
+        white-space: normal;
+        font-size: 1.8rem;
+        line-height: 1.35;
+    }
+
+    .mxd-hero-09__headline,
+    .mxd-hero-09__objects {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .hero-09-headline__caption {
+        margin-bottom: 3rem;
+    }
+
+    .hero-09-headline__tags {
+        gap: .65rem;
+        margin-top: 2.8rem;
+    }
+
+    .mxd-pinned-projects__scroll-inner {
+        gap: 5.2rem;
+    }
+
+    .mxd-pinned-projects .mxd-project-item__media {
+        margin-bottom: 1.4rem;
+    }
+
+    .mxd-pinned-projects .mxd-project-item__tags {
+        gap: .65rem;
+        padding-top: 1rem;
+    }
+
+    .mxd-project-item__promo {
+        padding-left: .2rem;
+        padding-right: .2rem;
+    }
+
+    .mxd-project-item__name a {
+        font-size: 2rem;
+        line-height: 1.35;
+    }
+
+    .sd-live-project-preview {
+        padding: .55rem;
+        border-radius: 1.8rem;
+    }
+
+    .sd-browser-frame {
+        border-radius: 1.35rem;
+        box-shadow: 0 1.4rem 3rem rgba(0,0,0,.25);
+    }
+
+    .sd-browser-bar {
+        height: 3rem;
+        gap: .8rem;
+        padding: 0 .8rem;
+    }
+
+    .sd-browser-dots,
+    .sd-browser-dots::before,
+    .sd-browser-dots::after {
+        width: .65rem;
+        height: .65rem;
+    }
+
+    .sd-browser-dots {
+        margin-right: 1.7rem;
+    }
+
+    .sd-browser-dots::before {
+        left: 1.05rem;
+    }
+
+    .sd-browser-dots::after {
+        left: 2.1rem;
+    }
+
+    .sd-browser-address {
+        padding: .35rem .7rem;
+        border-radius: .65rem;
+        font-size: .9rem;
+    }
+
+    .sd-footer-wordmark {
+        max-width: 100%;
+        font-size: clamp(3.2rem,11vw,5rem);
+        line-height: .92;
+        letter-spacing: -.04em;
+        white-space: nowrap;
+    }
+
+    .sd-footer-location {
+        margin-top: 3rem;
+    }
+
+    .footer-blocks__card .mxd-point-subtitle {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .footer-blocks__card .mxd-point-subtitle svg {
+        flex: 0 0 auto;
+        margin-top: .15rem;
+    }
+
+    .footer-blocks__card .mxd-point-subtitle a[href^="mailto:"] {
+        font-size: 1.85rem;
+        line-height: 1.3;
+        letter-spacing: -.02em;
+        overflow-wrap: normal;
+    }
+
+    .mxd-promo__caption {
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .mxd-pinned-projects__scroll-inner {
+        gap: 6.5rem;
+    }
+
+    .sd-browser-bar {
+        height: 3.8rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sd-project-video {
+        animation: none !important;
+    }
+}
+
