@@ -415,7 +415,7 @@
 }
 
 .divider-image-6 {
-    background-image: url(../img/banner-scroll.png);
+    background-image: url(../img/hero-image.png);
 }
 
 .divider-image-7 {
@@ -435,7 +435,7 @@
 }
 
 .mxd-promo__bg {
-    background-image: url(../img/lets-talk-2.png);
+    background-image: url(../img/portfolio/process-design.svg);
 }
 
 .preview-image-1 {
@@ -23214,11 +23214,5 @@ form textarea:required:valid {
 /* ------------------------------------------------ */
 /* Features - Project Details End */
 /* ------------------------------------------------ */
-.preview-image-8 {
-    background-image: url(../img/portfolio/sevenfusion-preview.svg);
-}
-
-.sd-home-project-preview {
-    background-size: cover;
-    background-position: center;
-}
+.preview-image-8{background-image:url(../img/portfolio/sevenfusion-preview.svg)}
+.sd-home-project-preview{background-size:cover;background-position:center;}
