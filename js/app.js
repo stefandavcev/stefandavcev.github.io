@@ -62,57 +62,140 @@ gsap.registerPlugin(Flip);
 
 // --------------------------------------------- //
 // Loader & Loading Animation Start
-// --------------------------------------------- //
-const content = document.querySelector('body');
-const imgLoad = imagesLoaded(content);
+// The original demo counter advanced independently from the actual page state.
+// This version progresses smoothly, waits for critical content, reaches 100%,
+// and starts revealing the page before the loader leaves—so there is no black gap.
 const loadingWrap = document.querySelector('.loading-wrap');
 const loadingItems = loadingWrap ? loadingWrap.querySelectorAll('.loading__item') : [];
 const fadeInItems = document.querySelectorAll('.loading__fade');
+const loader = document.getElementById('loader');
+const counterElement = document.querySelector('.loader__count .count__text');
+const loaderStartedAt = performance.now();
+const minLoaderTime = 900;
+const maxLoaderTime = 3200;
+let progressValue = 0;
+let finishScheduled = false;
+let loaderFinished = false;
+
+function setLoaderCounter(value) {
+  progressValue = Math.max(progressValue, Math.min(100, Math.round(value)));
+  if (counterElement) counterElement.textContent = progressValue;
+}
 
 function startLoader() {
-  let counterElement = document.querySelector(".loader__count .count__text");
-  let currentValue = 0;
-  function updateCounter() {
-    if (currentValue < 100) {
-      let increment = Math.floor(Math.random() * 10) + 1;
-      currentValue = Math.min(currentValue + increment, 100);
-      counterElement.textContent = currentValue;
-      let delay = Math.floor(Math.random() * 120) + 25;
-      setTimeout(updateCounter, delay);
-    }
+  if (!loader || !counterElement) return;
+  const progressStartedAt = performance.now();
+  const progressDuration = 1200;
+
+  function tick(now) {
+    if (loaderFinished) return;
+    const raw = Math.min((now - progressStartedAt) / progressDuration, 1);
+    const eased = 1 - Math.pow(1 - raw, 3);
+    setLoaderCounter(eased * 88);
+    if (raw < 1) requestAnimationFrame(tick);
   }
-  updateCounter();
-}
-startLoader();
 
-imgLoad.on('done', instance => {
-  hideLoader();
-  pageAppearance();
-});
-
-function hideLoader() {
-  gsap.to(".loader__count", { duration: 0.8, ease: 'power2.in', y: "100%", delay: 1.8 });
-  gsap.to(".loader__wrapper", { duration: 0.8, ease: 'power4.in', y: "-100%", delay: 2.2 });
-  setTimeout(() => {
-    document.getElementById("loader").classList.add("loaded");
-  }, 3200);
+  requestAnimationFrame(tick);
 }
 
 function pageAppearance() {
-  gsap.set(loadingItems, { opacity: 0 })
-  gsap.to(loadingItems, { 
-    duration: 1.1,
-    ease: 'power4',
-    startAt: {y: 120},
-    y: 0,
-    opacity: 1,
-    delay: 0.8,
-    stagger: 0.08
-  }, '>-=1.1');
-  gsap.set(fadeInItems, { opacity: 0 });
-  gsap.to(fadeInItems, { duration: 0.8, ease: 'none', opacity: 1, delay: 3.2 });
+  if (loadingItems.length) {
+    gsap.set(loadingItems, { opacity: 0, y: 70 });
+    gsap.to(loadingItems, {
+      duration: 0.72,
+      ease: 'power3.out',
+      y: 0,
+      opacity: 1,
+      stagger: 0.06,
+      delay: 0.04
+    });
+  }
+
+  if (fadeInItems.length) {
+    gsap.set(fadeInItems, { opacity: 0 });
+    gsap.to(fadeInItems, {
+      duration: 0.48,
+      ease: 'none',
+      opacity: 1,
+      delay: 0.08
+    });
+  }
 }
-// --------------------------------------------- //
+
+function hideLoader() {
+  if (loaderFinished) return;
+  loaderFinished = true;
+  pageAppearance();
+
+  if (!loader) {
+    document.body.classList.add('sd-page-ready');
+    return;
+  }
+
+  const counterState = { value: progressValue };
+  gsap.to(counterState, {
+    duration: 0.28,
+    value: 100,
+    ease: 'power1.out',
+    onUpdate: () => setLoaderCounter(counterState.value)
+  });
+
+  gsap.to('.loader__count', {
+    duration: 0.38,
+    ease: 'power2.in',
+    y: '100%',
+    delay: 0.22
+  });
+
+  gsap.to('.loader__wrapper', {
+    duration: 0.64,
+    ease: 'power3.inOut',
+    y: '-100%',
+    delay: 0.28,
+    onComplete: () => {
+      loader.classList.add('loaded');
+      document.body.classList.add('sd-page-ready');
+    }
+  });
+}
+
+function scheduleHideLoader() {
+  if (finishScheduled || loaderFinished) return;
+  finishScheduled = true;
+  const elapsed = performance.now() - loaderStartedAt;
+  window.setTimeout(hideLoader, Math.max(0, minLoaderTime - elapsed));
+}
+
+function waitForCriticalContent() {
+  const criticalImages = Array.from(document.querySelectorAll('.loading-wrap img')).slice(0, 2);
+  const imagePromises = criticalImages.map((image) => {
+    if (image.complete) return Promise.resolve();
+    return new Promise((resolve) => {
+      image.addEventListener('load', resolve, { once: true });
+      image.addEventListener('error', resolve, { once: true });
+    });
+  });
+
+  const fontsReady = document.fonts && document.fonts.ready
+    ? document.fonts.ready.catch(() => undefined)
+    : Promise.resolve();
+
+  const criticalReady = Promise.all([fontsReady, ...imagePromises]);
+  const safetyReady = new Promise((resolve) => window.setTimeout(resolve, 2200));
+
+  Promise.race([criticalReady, safetyReady]).then(scheduleHideLoader);
+}
+
+startLoader();
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', waitForCriticalContent, { once: true });
+} else {
+  waitForCriticalContent();
+}
+
+window.addEventListener('load', scheduleHideLoader, { once: true });
+window.setTimeout(scheduleHideLoader, maxLoaderTime);
 // Loader & Loading Animation End
 // --------------------------------------------- //
 

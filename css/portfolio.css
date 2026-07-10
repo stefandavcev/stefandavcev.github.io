@@ -218,7 +218,7 @@
 
 .sd-project-card__media {
     display: block;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16/9;
     overflow: hidden;
     background: #171717;
 }
@@ -823,7 +823,8 @@
 }
 
 .loader {
-    animation: sdLoaderFailsafe 0s linear 5s forwards;
+    /* JavaScript controls the exit so content is revealed before the panel moves. */
+    animation: none;
 }
 
 .loader.loaded {
@@ -1317,3 +1318,57 @@
     }
 }
 
+
+
+/* Video preview stability: keep a sharp still visible until a playable frame exists. */
+.sd-video-shell {
+    position: relative;
+    overflow: hidden;
+    background: #111;
+}
+
+.sd-video-shell .sd-project-video,
+.sd-video-shell .sd-video-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.sd-video-shell .sd-project-video {
+    z-index: 1;
+}
+
+.sd-video-shell .sd-video-poster {
+    z-index: 2;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .28s ease, visibility 0s linear .28s;
+    pointer-events: none;
+}
+
+.sd-video-shell.is-video-ready .sd-video-poster {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sd-project-hero-image.sd-case-study-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    background: #111;
+}
+
+.sd-case-study-media .sd-case-study-video,
+.sd-case-study-media .sd-video-poster {
+    border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sd-video-shell .sd-video-poster {
+        transition: none;
+    }
+}
