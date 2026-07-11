@@ -1725,3 +1725,101 @@
         padding-right: 5.5rem;
     }
 }
+
+/* ================================================================
+   Mobile motion restoration + full divider artwork
+   - Keeps the cards in a safe vertical layout on phones.
+   - Restores a scroll-triggered entrance instead of the desktop pinning.
+   - Shows the complete 16:9 divider artwork without mobile zoom/cropping.
+   ================================================================ */
+@media (max-width: 767px) {
+    .mxd-divider {
+        height: auto !important;
+        min-height: 0 !important;
+        background: #151515;
+    }
+
+    .mxd-divider__image.divider-image-6 {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 9;
+        background-size: contain !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-color: #151515;
+        transform: none !important;
+    }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    .services-stack .stack-item.sd-mobile-reveal {
+        opacity: 0 !important;
+        visibility: visible !important;
+        transform: translate3d(0, 4.2rem, 0) scale(.985) !important;
+        transition:
+            opacity .62s ease var(--sd-reveal-delay, 0ms),
+            transform .82s cubic-bezier(.2, .72, .2, 1) var(--sd-reveal-delay, 0ms) !important;
+        will-change: opacity, transform;
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view {
+        opacity: 1 !important;
+        transform: translate3d(0, 0, 0) scale(1) !important;
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal .mxd-services-stack__title,
+    .services-stack .stack-item.sd-mobile-reveal .mxd-services-stack__info,
+    .services-stack .stack-item.sd-mobile-reveal .services-stack__image,
+    .services-stack .stack-item.sd-mobile-reveal .mxd-services-stack__controls {
+        opacity: 0;
+        transform: translate3d(0, 1.4rem, 0);
+        transition: opacity .55s ease, transform .72s cubic-bezier(.2, .72, .2, 1);
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view .mxd-services-stack__title,
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view .mxd-services-stack__controls {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition-delay: .08s;
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view .mxd-services-stack__info {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition-delay: .16s;
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view .services-stack__image {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        transition-delay: .24s;
+    }
+
+    /* Restore subtle movement to the artwork after each card appears. */
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--wordpress {
+        animation: sdServiceFloatA 5.8s ease-in-out .7s infinite !important;
+    }
+
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--visual {
+        animation: sdServiceFloatB 6.4s ease-in-out .7s infinite !important;
+    }
+
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--improvement {
+        animation: sdServiceFloatA 6.8s ease-in-out .7s infinite !important;
+    }
+
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--creative {
+        animation: sdServiceFloatB 5.9s ease-in-out .7s infinite !important;
+    }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+    .services-stack .stack-item,
+    .services-stack .stack-item * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
