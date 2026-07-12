@@ -1823,3 +1823,178 @@
         animation: none !important;
     }
 }
+
+/* ================================================================
+   Mobile service-card stack + animated artwork + rotating monogram
+   ================================================================ */
+.btn-rotating__monogram {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    color: var(--t-bright);
+    font-size: 5.2rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.09em;
+    text-transform: lowercase;
+    transform: translate(-52%, -52%);
+    transition: transform var(--_animspeed-medium) var(--_animbezier), color var(--_animspeed-medium) var(--_animbezier);
+}
+
+.btn-rotating__monogram > span {
+    color: var(--accent);
+    margin-left: .04em;
+}
+
+.no-touch .btn-rotating:hover .btn-rotating__monogram {
+    transform: translate(-52%, -52%) scale(.92);
+}
+
+/* The added article makes the circular copy slightly longer. */
+.btn-rotating-blur-outline.ver-02 .btn-rotating__text text {
+    font-size: 1.12rem;
+    letter-spacing: .05rem;
+}
+
+@keyframes sdMobileArtworkFloatA {
+    0%, 100% { transform: translate3d(0, .2rem, 0) rotate(-.8deg) scale(1); }
+    35% { transform: translate3d(-.7rem, -1.2rem, 0) rotate(.7deg) scale(1.025); }
+    70% { transform: translate3d(.7rem, -.5rem, 0) rotate(-.2deg) scale(1.012); }
+}
+
+@keyframes sdMobileArtworkFloatB {
+    0%, 100% { transform: translate3d(0, -.2rem, 0) rotate(.7deg) scale(1.01); }
+    38% { transform: translate3d(.8rem, -1.1rem, 0) rotate(-.8deg) scale(1.03); }
+    72% { transform: translate3d(-.6rem, .3rem, 0) rotate(.3deg) scale(1); }
+}
+
+@media (max-width: 767px) {
+    /* Center the rotating project badge exactly like desktop. */
+    .mxd-container__circle {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-bottom: -4.5rem;
+        padding-right: 0 !important;
+        text-align: center !important;
+    }
+
+    .btn-rotating-blur-outline .btn-rotating__monogram {
+        font-size: 3.6rem;
+    }
+
+    .btn-rotating-blur-outline.ver-02 .btn-rotating__text text {
+        font-size: .92rem;
+        letter-spacing: .025rem;
+    }
+
+    /* Real sticky stack on phones. Each following card covers the previous one. */
+    .mxd-section.padding-stacked-section {
+        overflow: visible !important;
+        padding-bottom: 10rem !important;
+    }
+
+    .stack-wrapper,
+    .services-stack {
+        overflow: visible !important;
+    }
+
+    .services-stack {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding-bottom: 3rem;
+    }
+
+    .services-stack .stack-item {
+        --sd-stack-index: 0;
+        --sd-stack-scale: 1;
+        --sd-stack-y: 0rem;
+        --sd-stack-brightness: 1;
+        position: sticky !important;
+        top: calc(7.2rem + (var(--sd-stack-index) * .85rem)) !important;
+        z-index: calc(20 + var(--sd-stack-index)) !important;
+        width: 100% !important;
+        height: clamp(58rem, calc(100svh - 8.2rem), 72rem) !important;
+        min-height: 0 !important;
+        margin: 0 0 4.5rem !important;
+        padding: 0 !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        will-change: auto;
+    }
+
+    .services-stack .stack-item:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    .services-stack .stack-item .mxd-services-stack__inner,
+    .services-stack .stack-item .mxd-services-stack__inner.radius-dark {
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: 2.6rem 2.4rem 0 !important;
+        transform: translate3d(0, var(--sd-stack-y), 0) scale(var(--sd-stack-scale));
+        transform-origin: center top;
+        filter: brightness(var(--sd-stack-brightness));
+        box-shadow: 0 2.2rem 5rem rgba(0,0,0,.22);
+        transition: transform .18s linear, filter .18s linear, opacity .6s ease;
+        will-change: transform, filter;
+    }
+
+    .services-stack__image {
+        height: clamp(16rem, 25svh, 21rem) !important;
+        margin-top: auto !important;
+        flex: 0 0 auto;
+    }
+
+    .services-stack__image .service-img.sd-service-visual,
+    .services-stack__image .service-img-s.sd-service-visual {
+        height: 100% !important;
+        max-height: none !important;
+        transform-origin: center bottom;
+        will-change: transform;
+    }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    /* Reveal the card content without moving the sticky item itself. */
+    .services-stack .stack-item.sd-mobile-reveal .mxd-services-stack__inner {
+        opacity: 0;
+        --sd-stack-y: 3.2rem;
+        --sd-stack-scale: .975;
+        transition:
+            opacity .58s ease var(--sd-reveal-delay, 0ms),
+            transform .78s cubic-bezier(.2,.72,.2,1) var(--sd-reveal-delay, 0ms),
+            filter .18s linear !important;
+    }
+
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view .mxd-services-stack__inner {
+        opacity: 1;
+        --sd-stack-y: 0rem;
+    }
+
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--wordpress,
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--improvement {
+        animation: sdMobileArtworkFloatA 5.4s cubic-bezier(.45,.05,.55,.95) .55s infinite !important;
+    }
+
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--visual,
+    .services-stack .stack-item.is-in-view .service-img.sd-service-visual--creative {
+        animation: sdMobileArtworkFloatB 5.9s cubic-bezier(.45,.05,.55,.95) .55s infinite !important;
+    }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    .services-stack .stack-item.sd-mobile-reveal,
+    .services-stack .stack-item.sd-mobile-reveal.is-in-view {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+}
