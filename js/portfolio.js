@@ -168,13 +168,16 @@
   }
 
   /* ---------------------------------------------------------------
-     Mobile service-card reveal
-     Desktop keeps the original stacked/pinned animation. On phones the cards
-     remain readable in normal flow, but now reveal progressively while scrolling.
+     Mobile service-card stack
+     Cards remain in normal document order but become sticky on phones. The
+     next card visually covers and slightly compresses the previous one.
      --------------------------------------------------------------- */
   const mobileServicesQuery = window.matchMedia('(max-width: 767px)');
   const serviceCards = Array.from(document.querySelectorAll('.services-stack .stack-item'));
   let serviceObserver = null;
+  let stackFrame = 0;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   const resetServiceCards = () => {
     if (serviceObserver) {
@@ -185,45 +188,96 @@
     serviceCards.forEach((card) => {
       card.classList.remove('sd-mobile-reveal', 'is-in-view');
       card.style.removeProperty('--sd-reveal-delay');
+      card.style.removeProperty('--sd-stack-index');
+      card.style.removeProperty('--sd-stack-scale');
+      card.style.removeProperty('--sd-stack-y');
+      card.style.removeProperty('--sd-stack-brightness');
     });
   };
 
-  const setupServiceReveal = () => {
+  const updateMobileServiceStack = () => {
+    stackFrame = 0;
+    if (!mobileServicesQuery.matches || !serviceCards.length) return;
+
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    serviceCards.forEach((card, index) => {
+      const nextCard = serviceCards[index + 1];
+      if (!nextCard) {
+        card.style.setProperty('--sd-stack-scale', '1');
+        card.style.setProperty('--sd-stack-y', '0rem');
+        card.style.setProperty('--sd-stack-brightness', '1');
+        return;
+      }
+
+      const nextRect = nextCard.getBoundingClientRect();
+      const stickyTop = 72 + index * 8.5;
+      const animationStart = viewportHeight * 0.88;
+      const animationEnd = stickyTop + 105;
+      const progress = clamp(
+        (animationStart - nextRect.top) / Math.max(animationStart - animationEnd, 1),
+        0,
+        1
+      );
+
+      card.style.setProperty('--sd-stack-scale', (1 - progress * 0.038).toFixed(4));
+      card.style.setProperty('--sd-stack-y', `${(-progress * 0.75).toFixed(3)}rem`);
+      card.style.setProperty('--sd-stack-brightness', (1 - progress * 0.13).toFixed(3));
+    });
+  };
+
+  const scheduleMobileServiceStack = () => {
+    if (stackFrame) return;
+    stackFrame = window.requestAnimationFrame(updateMobileServiceStack);
+  };
+
+  const setupServiceStack = () => {
     resetServiceCards();
     if (!serviceCards.length) return;
 
-    if (!mobileServicesQuery.matches || reduceMotion) {
+    if (!mobileServicesQuery.matches) {
       serviceCards.forEach((card) => card.classList.add('is-in-view'));
       return;
     }
 
     serviceCards.forEach((card, index) => {
-      card.classList.add('sd-mobile-reveal');
+      card.style.setProperty('--sd-stack-index', String(index));
       card.style.setProperty('--sd-reveal-delay', `${Math.min(index, 3) * 45}ms`);
+      if (!reduceMotion) card.classList.add('sd-mobile-reveal');
     });
 
-    serviceObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-in-view');
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -8% 0px'
-      }
-    );
+    if (reduceMotion) {
+      serviceCards.forEach((card) => card.classList.add('is-in-view'));
+    } else {
+      serviceObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-in-view');
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.08,
+          rootMargin: '0px 0px -5% 0px'
+        }
+      );
 
-    serviceCards.forEach((card) => serviceObserver.observe(card));
+      serviceCards.forEach((card) => serviceObserver.observe(card));
+    }
+
+    scheduleMobileServiceStack();
   };
 
-  setupServiceReveal();
+  setupServiceStack();
+
+  window.addEventListener('scroll', scheduleMobileServiceStack, { passive: true });
+  window.addEventListener('resize', scheduleMobileServiceStack, { passive: true });
+  window.addEventListener('orientationchange', scheduleMobileServiceStack, { passive: true });
 
   if (typeof mobileServicesQuery.addEventListener === 'function') {
-    mobileServicesQuery.addEventListener('change', setupServiceReveal);
+    mobileServicesQuery.addEventListener('change', setupServiceStack);
   } else if (typeof mobileServicesQuery.addListener === 'function') {
-    mobileServicesQuery.addListener(setupServiceReveal);
+    mobileServicesQuery.addListener(setupServiceStack);
   }
 })();
