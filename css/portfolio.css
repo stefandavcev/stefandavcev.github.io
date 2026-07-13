@@ -1998,3 +1998,114 @@
         transform: none !important;
     }
 }
+
+
+/* ---------------------------------------------------------------
+   Contact CTA: floating orbital sculpture
+   --------------------------------------------------------------- */
+#contact-cta .mxd-promo__bg {
+    background-image: none !important;
+    background:
+        radial-gradient(circle at 52% 48%, rgba(132, 91, 255, .17), transparent 42%),
+        linear-gradient(145deg, #111210 0%, #080908 100%);
+}
+
+#contact-cta .mxd-promo__images.sd-orbit-promo-art {
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 50% 48%, rgba(126, 88, 255, .14), transparent 46%),
+        #090a09;
+}
+
+#contact-cta .sd-orbit-sculpture {
+    display: block;
+    position: relative;
+    width: min(78%, 54rem);
+    height: auto;
+    object-fit: contain !important;
+    filter:
+        drop-shadow(0 2.4rem 4rem rgba(0, 0, 0, .42))
+        drop-shadow(0 0 2.6rem rgba(121, 83, 255, .12));
+    transform-origin: 50% 52%;
+    will-change: transform;
+    animation: sdOrbitSculptureFloat 7.5s ease-in-out infinite;
+}
+
+@keyframes sdOrbitSculptureFloat {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(-1.2deg) scale(1);
+    }
+    50% {
+        transform: translate3d(0, -1.8rem, 0) rotate(1.2deg) scale(1.018);
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    #contact-cta .mxd-promo__images.sd-orbit-promo-art {
+        display: flex;
+        position: absolute;
+        inset: 0 0 0 auto;
+        width: 50%;
+        height: 100%;
+    }
+
+    #contact-cta .sd-orbit-sculpture {
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+    }
+}
+
+/* Tablet and mobile: keep the CTA copy clean, then show the artwork below it. */
+@media only screen and (max-width: 1199px) {
+    #contact-cta .mxd-promo__bg {
+        display: none !important;
+    }
+
+    #contact-cta .mxd-promo__inner {
+        padding-bottom: 0;
+    }
+
+    #contact-cta .mxd-promo__content {
+        margin-bottom: 4rem;
+    }
+
+    #contact-cta .mxd-promo__images.sd-orbit-promo-art {
+        display: flex !important;
+        position: relative;
+        inset: auto;
+        flex: 0 0 auto;
+        width: calc(100% + 10rem);
+        height: 40rem;
+        margin: 0 -5rem;
+        border-radius: 0 0 3rem 3rem;
+    }
+
+    #contact-cta .sd-orbit-sculpture {
+        width: min(72vw, 40rem);
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    #contact-cta .mxd-promo__content {
+        margin-bottom: 3rem;
+    }
+
+    #contact-cta .mxd-promo__images.sd-orbit-promo-art {
+        width: calc(100% + 4.8rem);
+        height: 29rem;
+        margin: 0 -2.4rem;
+    }
+
+    #contact-cta .sd-orbit-sculpture {
+        width: min(82vw, 31rem);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #contact-cta .sd-orbit-sculpture {
+        animation: none;
+    }
+}
