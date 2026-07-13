@@ -41,31 +41,30 @@
 
   /* ---------------------------------------------------------------
      Project video playback
-     Only one preview plays at a time, and only while its section is visible.
-     On the homepage, the first project starts first; the next one starts only
-     when scrolling naturally brings that project closest to the viewport.
+     One video plays at a time. Playback starts only when a project preview
+     is actually visible, and follows the user's natural scroll position.
      --------------------------------------------------------------- */
   const projectVideos = Array.from(document.querySelectorAll('.sd-project-video'));
-  const homepageProjects = document.getElementById('projects');
   let activeProjectVideo = null;
-  let videoFrameRequest = 0;
+  let projectVideoFrame = 0;
+  let projectVideoTimer = 0;
 
-  const pauseVideo = (video) => {
+  const pauseProjectVideo = (video) => {
     if (!video.paused) video.pause();
   };
 
-  const pauseAllProjectVideos = (exceptVideo = null) => {
+  const pauseOtherProjectVideos = (activeVideo = null) => {
     projectVideos.forEach((video) => {
-      if (video !== exceptVideo) pauseVideo(video);
+      if (video !== activeVideo) pauseProjectVideo(video);
     });
   };
 
-  const markReady = (video) => {
+  const markProjectVideoReady = (video) => {
     const shell = video.closest('.sd-video-shell');
     if (shell) shell.classList.add('is-video-ready');
   };
 
-  const prepareVideo = (video) => {
+  projectVideos.forEach((video) => {
     video.muted = true;
     video.defaultMuted = true;
     video.setAttribute('muted', '');
@@ -73,26 +72,27 @@
     video.setAttribute('playsinline', '');
     video.autoplay = false;
     video.removeAttribute('autoplay');
-    video.preload = 'none';
-    pauseVideo(video);
-  };
+    video.preload = 'metadata';
 
-  projectVideos.forEach((video) => {
-    prepareVideo(video);
-    video.addEventListener('playing', () => markReady(video));
-    video.addEventListener('canplay', () => {
-      if (!video.paused) markReady(video);
+    video.addEventListener('playing', () => markProjectVideoReady(video));
+    video.addEventListener('loadeddata', () => {
+      if (video === activeProjectVideo && video.paused) {
+        const retry = video.play();
+        if (retry && typeof retry.catch === 'function') retry.catch(() => {});
+      }
     });
   });
 
-  const getVisibleMetrics = (element) => {
-    const rect = element.getBoundingClientRect();
+  const getProjectVisibility = (video) => {
+    const target =
+      video.closest('.mxd-project-item__media') ||
+      video.closest('.sd-project-hero-image') ||
+      video.closest('.sd-video-shell') ||
+      video;
+
+    const rect = target.getBoundingClientRect();
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-
-    if (rect.width <= 0 || rect.height <= 0) {
-      return { ratio: 0, score: -Infinity };
-    }
 
     const visibleWidth = Math.max(
       0,
@@ -103,128 +103,88 @@
       Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
     );
     const visibleArea = visibleWidth * visibleHeight;
-    const ratio = visibleArea / (rect.width * rect.height);
+    const viewportArea = Math.max(viewportWidth * viewportHeight, 1);
 
     if (visibleArea <= 0) {
-      return { ratio: 0, score: -Infinity };
+      return { visible: false, score: -Infinity };
     }
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    const distanceX = Math.abs(centerX - viewportWidth / 2) / Math.max(viewportWidth, 1);
-    const distanceY = Math.abs(centerY - viewportHeight / 2) / Math.max(viewportHeight, 1);
+    const distanceFromCenter =
+      Math.abs(centerX - viewportWidth / 2) / Math.max(viewportWidth, 1) +
+      Math.abs(centerY - viewportHeight / 2) / Math.max(viewportHeight, 1);
+
+    const viewportCoverage = visibleArea / viewportArea;
 
     return {
-      ratio,
-      score: ratio * 100 - (distanceX + distanceY) * 12
+      visible: viewportCoverage >= 0.025,
+      score: viewportCoverage * 100 - distanceFromCenter * 6
     };
   };
 
-  const isProjectsSectionVisible = () => {
-    if (!homepageProjects) return true;
+  const playProjectVideo = (video) => {
+    if (!video) return;
 
-    const rect = homepageProjects.getBoundingClientRect();
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const visibleHeight = Math.max(
-      0,
-      Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
-    );
+    if (activeProjectVideo !== video) {
+      pauseOtherProjectVideos(video);
+      activeProjectVideo = video;
 
-    return visibleHeight >= Math.min(viewportHeight * 0.12, 120);
-  };
-
-  const activateProjectVideo = (video) => {
-    if (!video || video === activeProjectVideo) {
-      if (video && video.paused) {
-        const resumePromise = video.play();
-        if (resumePromise && typeof resumePromise.catch === 'function') {
-          resumePromise.catch(() => {});
-        }
+      if (video.dataset.sdLoaded !== 'true') {
+        video.dataset.sdLoaded = 'true';
+        video.preload = 'auto';
+        video.load();
       }
-      return;
-    }
 
-    pauseAllProjectVideos(video);
-    activeProjectVideo = video;
-
-    // Load only the video that has become active.
-    if (video.dataset.sdLoaded !== 'true') {
-      video.preload = 'auto';
-      video.dataset.sdLoaded = 'true';
-      video.load();
-    }
-
-    // Each project begins from its opening frame when it becomes active.
-    try {
-      video.currentTime = 0;
-    } catch (error) {
-      // Some browsers disallow seeking before metadata is ready.
-    }
-
-    const playActive = () => {
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          // Keep the poster visible if autoplay is blocked by the browser.
-        });
+      try {
+        video.currentTime = 0;
+      } catch (error) {
+        // Seeking may be unavailable until metadata has loaded.
       }
-    };
+    }
 
-    if (video.readyState >= 2) {
-      playActive();
-    } else {
-      video.addEventListener('canplay', playActive, { once: true });
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        // A later scroll/timer pass retries playback automatically.
+      });
     }
   };
 
   const updateProjectVideoPlayback = () => {
-    videoFrameRequest = 0;
+    projectVideoFrame = 0;
 
-    if (
-      !projectVideos.length ||
-      reduceMotion ||
-      saveData ||
-      document.hidden ||
-      !isProjectsSectionVisible()
-    ) {
-      pauseAllProjectVideos();
+    if (!projectVideos.length || document.hidden) {
+      pauseOtherProjectVideos();
       activeProjectVideo = null;
       return;
     }
 
-    let nextVideo = null;
+    let bestVideo = null;
     let bestScore = -Infinity;
 
     projectVideos.forEach((video) => {
-      const target =
-        video.closest('.mxd-project-item__media') ||
-        video.closest('.sd-project-hero-image') ||
-        video.closest('.sd-video-shell') ||
-        video;
+      const visibility = getProjectVisibility(video);
+      if (!visibility.visible) return;
 
-      const metrics = getVisibleMetrics(target);
-
-      // Avoid starting a video that is only touching the edge of the viewport.
-      if (metrics.ratio < 0.22) return;
-
-      if (metrics.score > bestScore) {
-        bestScore = metrics.score;
-        nextVideo = video;
+      if (visibility.score > bestScore) {
+        bestScore = visibility.score;
+        bestVideo = video;
       }
     });
 
-    if (!nextVideo) {
-      pauseAllProjectVideos();
+    if (!bestVideo) {
+      pauseOtherProjectVideos();
       activeProjectVideo = null;
       return;
     }
 
-    activateProjectVideo(nextVideo);
+    playProjectVideo(bestVideo);
   };
 
   const scheduleProjectVideoPlayback = () => {
-    if (videoFrameRequest) return;
-    videoFrameRequest = window.requestAnimationFrame(updateProjectVideoPlayback);
+    if (projectVideoFrame) return;
+    projectVideoFrame = window.requestAnimationFrame(updateProjectVideoPlayback);
   };
 
   if (projectVideos.length) {
@@ -238,6 +198,10 @@
     scheduleProjectVideoPlayback();
     window.setTimeout(scheduleProjectVideoPlayback, 300);
     window.setTimeout(scheduleProjectVideoPlayback, 900);
+
+    // The desktop project section is transformed horizontally by another script.
+    // This light timer keeps playback in sync even between native scroll events.
+    projectVideoTimer = window.setInterval(scheduleProjectVideoPlayback, 250);
   }
 
   /* ---------------------------------------------------------------
