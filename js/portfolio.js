@@ -36,16 +36,15 @@
     link.rel = 'noopener noreferrer';
   });
 
-  /*
-   * Project video playback
-   * ----------------------
-   * The homepage uses a pinned/horizontally transformed project section.
-   * IntersectionObserver can report stale ratios inside that animation, so
-   * playback is selected from the videos' real on-screen rectangles instead.
-   */
-  const projectVideos = Array.from(document.querySelectorAll('.sd-project-video'));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+
+  /* ---------------------------------------------------------------
+     Project video playback
+     The homepage uses transformed project cards, so the visible video is
+     selected from its real on-screen rectangle instead of a strict observer.
+     --------------------------------------------------------------- */
+  const projectVideos = Array.from(document.querySelectorAll('.sd-project-video'));
 
   const pauseVideo = (video) => {
     if (!video.paused) video.pause();
@@ -62,7 +61,6 @@
     video.setAttribute('muted', '');
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-
     video.addEventListener('playing', () => markReady(video));
     video.addEventListener('canplay', () => {
       if (!video.paused) markReady(video);
@@ -70,13 +68,9 @@
   });
 
   if (projectVideos.length && !reduceMotion && !saveData) {
-    // Preload both small portfolio previews so the poster can switch to video
-    // immediately when the corresponding card enters the viewport.
     projectVideos.forEach((video) => {
       video.preload = 'auto';
-      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) {
-        video.load();
-      }
+      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
     });
 
     let frameRequest = 0;
@@ -102,7 +96,6 @@
         0,
         Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
       );
-
       const visibleArea = visibleWidth * visibleHeight;
       if (visibleArea <= 0) return -Infinity;
 
@@ -112,7 +105,6 @@
       const dx = Math.abs(centerX - viewportWidth / 2) / Math.max(viewportWidth, 1);
       const dy = Math.abs(centerY - viewportHeight / 2) / Math.max(viewportHeight, 1);
 
-      // Prefer the largest visible area, then the item nearest the viewport centre.
       return areaRatio * 100 - (dx + dy) * 8;
     };
 
@@ -144,14 +136,12 @@
         if (video !== activeVideo) pauseVideo(video);
       });
 
-      if (activeVideo.networkState === HTMLMediaElement.NETWORK_EMPTY) {
-        activeVideo.load();
-      }
+      if (activeVideo.networkState === HTMLMediaElement.NETWORK_EMPTY) activeVideo.load();
 
       const playPromise = activeVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
-          // The sharp poster remains visible if a browser blocks autoplay.
+          // The poster remains visible when autoplay is blocked.
         });
       }
     };
@@ -172,10 +162,122 @@
     window.setTimeout(schedulePlaybackUpdate, 250);
     window.setTimeout(schedulePlaybackUpdate, 800);
     window.setTimeout(schedulePlaybackUpdate, 1600);
-
-    // Small fallback for transforms driven by animation libraries between scroll events.
     window.setInterval(schedulePlaybackUpdate, 400);
   } else {
     projectVideos.forEach(pauseVideo);
+  }
+
+  /* ---------------------------------------------------------------
+     Mobile service-card stack
+     Cards remain in normal document order but become sticky on phones. The
+     next card visually covers and slightly compresses the previous one.
+     --------------------------------------------------------------- */
+  const mobileServicesQuery = window.matchMedia('(max-width: 767px)');
+  const serviceCards = Array.from(document.querySelectorAll('.services-stack .stack-item'));
+  let serviceObserver = null;
+  let stackFrame = 0;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const resetServiceCards = () => {
+    if (serviceObserver) {
+      serviceObserver.disconnect();
+      serviceObserver = null;
+    }
+
+    serviceCards.forEach((card) => {
+      card.classList.remove('sd-mobile-reveal', 'is-in-view');
+      card.style.removeProperty('--sd-reveal-delay');
+      card.style.removeProperty('--sd-stack-index');
+      card.style.removeProperty('--sd-stack-scale');
+      card.style.removeProperty('--sd-stack-y');
+      card.style.removeProperty('--sd-stack-brightness');
+    });
+  };
+
+  const updateMobileServiceStack = () => {
+    stackFrame = 0;
+    if (!mobileServicesQuery.matches || !serviceCards.length) return;
+
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    serviceCards.forEach((card, index) => {
+      const nextCard = serviceCards[index + 1];
+      if (!nextCard) {
+        card.style.setProperty('--sd-stack-scale', '1');
+        card.style.setProperty('--sd-stack-y', '0rem');
+        card.style.setProperty('--sd-stack-brightness', '1');
+        return;
+      }
+
+      const nextRect = nextCard.getBoundingClientRect();
+      const stickyTop = 72 + index * 8.5;
+      const animationStart = viewportHeight * 0.88;
+      const animationEnd = stickyTop + 105;
+      const progress = clamp(
+        (animationStart - nextRect.top) / Math.max(animationStart - animationEnd, 1),
+        0,
+        1
+      );
+
+      card.style.setProperty('--sd-stack-scale', (1 - progress * 0.038).toFixed(4));
+      card.style.setProperty('--sd-stack-y', `${(-progress * 0.75).toFixed(3)}rem`);
+      card.style.setProperty('--sd-stack-brightness', (1 - progress * 0.13).toFixed(3));
+    });
+  };
+
+  const scheduleMobileServiceStack = () => {
+    if (stackFrame) return;
+    stackFrame = window.requestAnimationFrame(updateMobileServiceStack);
+  };
+
+  const setupServiceStack = () => {
+    resetServiceCards();
+    if (!serviceCards.length) return;
+
+    if (!mobileServicesQuery.matches) {
+      serviceCards.forEach((card) => card.classList.add('is-in-view'));
+      return;
+    }
+
+    serviceCards.forEach((card, index) => {
+      card.style.setProperty('--sd-stack-index', String(index));
+      card.style.setProperty('--sd-reveal-delay', `${Math.min(index, 3) * 45}ms`);
+      if (!reduceMotion) card.classList.add('sd-mobile-reveal');
+    });
+
+    if (reduceMotion) {
+      serviceCards.forEach((card) => card.classList.add('is-in-view'));
+    } else {
+      serviceObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-in-view');
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.08,
+          rootMargin: '0px 0px -5% 0px'
+        }
+      );
+
+      serviceCards.forEach((card) => serviceObserver.observe(card));
+    }
+
+    scheduleMobileServiceStack();
+  };
+
+  setupServiceStack();
+
+  window.addEventListener('scroll', scheduleMobileServiceStack, { passive: true });
+  window.addEventListener('resize', scheduleMobileServiceStack, { passive: true });
+  window.addEventListener('orientationchange', scheduleMobileServiceStack, { passive: true });
+
+  if (typeof mobileServicesQuery.addEventListener === 'function') {
+    mobileServicesQuery.addEventListener('change', setupServiceStack);
+  } else if (typeof mobileServicesQuery.addListener === 'function') {
+    mobileServicesQuery.addListener(setupServiceStack);
   }
 })();
