@@ -41,16 +41,25 @@
 
   /* ---------------------------------------------------------------
      Project video playback
-     The homepage uses transformed project cards, so the visible video is
-     selected from its real on-screen rectangle instead of a strict observer.
+     One video plays at a time. Playback starts only when a project preview
+     is actually visible, and follows the user's natural scroll position.
      --------------------------------------------------------------- */
   const projectVideos = Array.from(document.querySelectorAll('.sd-project-video'));
+  let activeProjectVideo = null;
+  let projectVideoFrame = 0;
+  let projectVideoTimer = 0;
 
-  const pauseVideo = (video) => {
+  const pauseProjectVideo = (video) => {
     if (!video.paused) video.pause();
   };
 
-  const markReady = (video) => {
+  const pauseOtherProjectVideos = (activeVideo = null) => {
+    projectVideos.forEach((video) => {
+      if (video !== activeVideo) pauseProjectVideo(video);
+    });
+  };
+
+  const markProjectVideoReady = (video) => {
     const shell = video.closest('.sd-video-shell');
     if (shell) shell.classList.add('is-video-ready');
   };
@@ -61,110 +70,138 @@
     video.setAttribute('muted', '');
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-    video.addEventListener('playing', () => markReady(video));
-    video.addEventListener('canplay', () => {
-      if (!video.paused) markReady(video);
+    video.autoplay = false;
+    video.removeAttribute('autoplay');
+    video.preload = 'metadata';
+
+    video.addEventListener('playing', () => markProjectVideoReady(video));
+    video.addEventListener('loadeddata', () => {
+      if (video === activeProjectVideo && video.paused) {
+        const retry = video.play();
+        if (retry && typeof retry.catch === 'function') retry.catch(() => {});
+      }
     });
   });
 
-  if (projectVideos.length && !reduceMotion && !saveData) {
+  const getProjectVisibility = (video) => {
+    const target =
+      video.closest('.mxd-project-item__media') ||
+      video.closest('.sd-project-hero-image') ||
+      video.closest('.sd-video-shell') ||
+      video;
+
+    const rect = target.getBoundingClientRect();
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    const visibleWidth = Math.max(
+      0,
+      Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0)
+    );
+    const visibleHeight = Math.max(
+      0,
+      Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
+    );
+    const visibleArea = visibleWidth * visibleHeight;
+    const viewportArea = Math.max(viewportWidth * viewportHeight, 1);
+
+    if (visibleArea <= 0) {
+      return { visible: false, score: -Infinity };
+    }
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distanceFromCenter =
+      Math.abs(centerX - viewportWidth / 2) / Math.max(viewportWidth, 1) +
+      Math.abs(centerY - viewportHeight / 2) / Math.max(viewportHeight, 1);
+
+    const viewportCoverage = visibleArea / viewportArea;
+
+    return {
+      visible: viewportCoverage >= 0.025,
+      score: viewportCoverage * 100 - distanceFromCenter * 6
+    };
+  };
+
+  const playProjectVideo = (video) => {
+    if (!video) return;
+
+    if (activeProjectVideo !== video) {
+      pauseOtherProjectVideos(video);
+      activeProjectVideo = video;
+
+      if (video.dataset.sdLoaded !== 'true') {
+        video.dataset.sdLoaded = 'true';
+        video.preload = 'auto';
+        video.load();
+      }
+
+      try {
+        video.currentTime = 0;
+      } catch (error) {
+        // Seeking may be unavailable until metadata has loaded.
+      }
+    }
+
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        // A later scroll/timer pass retries playback automatically.
+      });
+    }
+  };
+
+  const updateProjectVideoPlayback = () => {
+    projectVideoFrame = 0;
+
+    if (!projectVideos.length || document.hidden) {
+      pauseOtherProjectVideos();
+      activeProjectVideo = null;
+      return;
+    }
+
+    let bestVideo = null;
+    let bestScore = -Infinity;
+
     projectVideos.forEach((video) => {
-      video.preload = 'auto';
-      if (video.networkState === HTMLMediaElement.NETWORK_EMPTY) video.load();
+      const visibility = getProjectVisibility(video);
+      if (!visibility.visible) return;
+
+      if (visibility.score > bestScore) {
+        bestScore = visibility.score;
+        bestVideo = video;
+      }
     });
 
-    let frameRequest = 0;
+    if (!bestVideo) {
+      pauseOtherProjectVideos();
+      activeProjectVideo = null;
+      return;
+    }
 
-    const visibleScore = (video) => {
-      const target =
-        video.closest('.mxd-project-item__media') ||
-        video.closest('.sd-project-hero-image') ||
-        video.closest('.sd-video-shell') ||
-        video;
+    playProjectVideo(bestVideo);
+  };
 
-      const rect = target.getBoundingClientRect();
-      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const scheduleProjectVideoPlayback = () => {
+    if (projectVideoFrame) return;
+    projectVideoFrame = window.requestAnimationFrame(updateProjectVideoPlayback);
+  };
 
-      if (rect.width <= 0 || rect.height <= 0) return -Infinity;
+  if (projectVideos.length) {
+    window.addEventListener('scroll', scheduleProjectVideoPlayback, { passive: true });
+    window.addEventListener('resize', scheduleProjectVideoPlayback, { passive: true });
+    window.addEventListener('orientationchange', scheduleProjectVideoPlayback, { passive: true });
+    window.addEventListener('wheel', scheduleProjectVideoPlayback, { passive: true });
+    window.addEventListener('touchmove', scheduleProjectVideoPlayback, { passive: true });
+    document.addEventListener('visibilitychange', scheduleProjectVideoPlayback);
 
-      const visibleWidth = Math.max(
-        0,
-        Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0)
-      );
-      const visibleHeight = Math.max(
-        0,
-        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
-      );
-      const visibleArea = visibleWidth * visibleHeight;
-      if (visibleArea <= 0) return -Infinity;
+    scheduleProjectVideoPlayback();
+    window.setTimeout(scheduleProjectVideoPlayback, 300);
+    window.setTimeout(scheduleProjectVideoPlayback, 900);
 
-      const areaRatio = visibleArea / (rect.width * rect.height);
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = Math.abs(centerX - viewportWidth / 2) / Math.max(viewportWidth, 1);
-      const dy = Math.abs(centerY - viewportHeight / 2) / Math.max(viewportHeight, 1);
-
-      return areaRatio * 100 - (dx + dy) * 8;
-    };
-
-    const updatePlayback = () => {
-      frameRequest = 0;
-
-      if (document.hidden) {
-        projectVideos.forEach(pauseVideo);
-        return;
-      }
-
-      let activeVideo = null;
-      let bestScore = -Infinity;
-
-      projectVideos.forEach((video) => {
-        const score = visibleScore(video);
-        if (score > bestScore) {
-          bestScore = score;
-          activeVideo = video;
-        }
-      });
-
-      if (!activeVideo || bestScore === -Infinity) {
-        projectVideos.forEach(pauseVideo);
-        return;
-      }
-
-      projectVideos.forEach((video) => {
-        if (video !== activeVideo) pauseVideo(video);
-      });
-
-      if (activeVideo.networkState === HTMLMediaElement.NETWORK_EMPTY) activeVideo.load();
-
-      const playPromise = activeVideo.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          // The poster remains visible when autoplay is blocked.
-        });
-      }
-    };
-
-    const schedulePlaybackUpdate = () => {
-      if (frameRequest) return;
-      frameRequest = window.requestAnimationFrame(updatePlayback);
-    };
-
-    window.addEventListener('scroll', schedulePlaybackUpdate, { passive: true });
-    window.addEventListener('resize', schedulePlaybackUpdate, { passive: true });
-    window.addEventListener('orientationchange', schedulePlaybackUpdate, { passive: true });
-    window.addEventListener('wheel', schedulePlaybackUpdate, { passive: true });
-    window.addEventListener('touchmove', schedulePlaybackUpdate, { passive: true });
-    document.addEventListener('visibilitychange', schedulePlaybackUpdate);
-
-    schedulePlaybackUpdate();
-    window.setTimeout(schedulePlaybackUpdate, 250);
-    window.setTimeout(schedulePlaybackUpdate, 800);
-    window.setTimeout(schedulePlaybackUpdate, 1600);
-    window.setInterval(schedulePlaybackUpdate, 400);
-  } else {
-    projectVideos.forEach(pauseVideo);
+    // The desktop project section is transformed horizontally by another script.
+    // This light timer keeps playback in sync even between native scroll events.
+    projectVideoTimer = window.setInterval(scheduleProjectVideoPlayback, 250);
   }
 
   /* ---------------------------------------------------------------
