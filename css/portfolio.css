@@ -2026,13 +2026,8 @@
     height: auto;
     object-fit: contain !important;
     filter:
-<<<<<<< HEAD
         drop-shadow(0 0 .9rem rgba(121, 83, 255, .10))
         drop-shadow(0 0 2rem rgba(121, 83, 255, .08));
-=======
-        drop-shadow(0 2.4rem 4rem rgba(0, 0, 0, .42))
-        drop-shadow(0 0 2.6rem rgba(121, 83, 255, .12));
->>>>>>> f31a8e945f334d9d6922d42713b4614b80bc8102
     transform-origin: 50% 52%;
     will-change: transform;
     
@@ -2131,7 +2126,6 @@
 @keyframes sdOrbitInnerDrift {
     0% {
         filter:
-<<<<<<< HEAD
             drop-shadow(0 0 .9rem rgba(121, 83, 255, .10))
             drop-shadow(0 0 1.9rem rgba(121, 83, 255, .08));
     }
@@ -2139,15 +2133,6 @@
         filter:
             drop-shadow(0 0 1.2rem rgba(121, 83, 255, .18))
             drop-shadow(0 0 3rem rgba(121, 83, 255, .14));
-=======
-            drop-shadow(0 2.4rem 4rem rgba(0, 0, 0, .42))
-            drop-shadow(0 0 2.2rem rgba(121, 83, 255, .10));
-    }
-    100% {
-        filter:
-            drop-shadow(0 3rem 5rem rgba(0, 0, 0, .48))
-            drop-shadow(0 0 4.2rem rgba(121, 83, 255, .25));
->>>>>>> f31a8e945f334d9d6922d42713b4614b80bc8102
     }
 }
 
