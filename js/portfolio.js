@@ -15,11 +15,32 @@
   window.setTimeout(() => {
     const loader = document.getElementById('loader');
     if (loader && !loader.classList.contains('loaded')) revealPage();
-  }, 4500);
+  }, 1200);
 
   const year = new Date().getFullYear();
   document.querySelectorAll('.js-current-year').forEach((element) => {
     element.textContent = year;
+  });
+
+  // Keep the compact desktop navigation consistent across static pages.
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.sd-desktop-nav a').forEach((link) => {
+    const linkPage = (link.getAttribute('href') || '').split('#')[0];
+    if (linkPage === currentPage) link.setAttribute('aria-current', 'page');
+  });
+
+  // The template duplicates animated button captions visually. A single
+  // aria-label keeps those controls concise for assistive technology.
+  document.querySelectorAll('.btn-anim').forEach((button) => {
+    if (button.hasAttribute('aria-label')) return;
+    const caption = button.querySelector('.btn-caption');
+    if (caption && caption.textContent.trim()) {
+      button.setAttribute('aria-label', caption.textContent.trim());
+    }
+  });
+
+  document.querySelectorAll('i[class*="ph-"]').forEach((icon) => {
+    icon.setAttribute('aria-hidden', 'true');
   });
 
   const params = new URLSearchParams(window.location.search);

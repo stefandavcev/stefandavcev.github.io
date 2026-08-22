@@ -71,13 +71,14 @@ const fadeInItems = document.querySelectorAll('.loading__fade');
 
 function startLoader() {
   let counterElement = document.querySelector(".loader__count .count__text");
+  if (!counterElement) return;
   let currentValue = 0;
   function updateCounter() {
     if (currentValue < 100) {
-      let increment = Math.floor(Math.random() * 10) + 1;
+      let increment = Math.floor(Math.random() * 18) + 12;
       currentValue = Math.min(currentValue + increment, 100);
       counterElement.textContent = currentValue;
-      let delay = Math.floor(Math.random() * 120) + 25;
+      let delay = Math.floor(Math.random() * 35) + 20;
       setTimeout(updateCounter, delay);
     }
   }
@@ -85,32 +86,33 @@ function startLoader() {
 }
 startLoader();
 
-imgLoad.on('done', instance => {
+imgLoad.on('always', () => {
   hideLoader();
   pageAppearance();
 });
 
 function hideLoader() {
-  gsap.to(".loader__count", { duration: 0.8, ease: 'power2.in', y: "100%", delay: 1.8 });
-  gsap.to(".loader__wrapper", { duration: 0.8, ease: 'power4.in', y: "-100%", delay: 2.2 });
+  gsap.to(".loader__count", { duration: 0.22, ease: 'power2.in', y: "100%", delay: 0.12 });
+  gsap.to(".loader__wrapper", { duration: 0.42, ease: 'power4.inOut', y: "-100%", delay: 0.2 });
   setTimeout(() => {
-    document.getElementById("loader").classList.add("loaded");
-  }, 3200);
+    const loader = document.getElementById("loader");
+    if (loader) loader.classList.add("loaded");
+  }, 700);
 }
 
 function pageAppearance() {
   gsap.set(loadingItems, { opacity: 0 })
   gsap.to(loadingItems, { 
-    duration: 1.1,
+    duration: 0.7,
     ease: 'power4',
-    startAt: {y: 120},
+    startAt: {y: 72},
     y: 0,
     opacity: 1,
-    delay: 0.8,
-    stagger: 0.08
-  }, '>-=1.1');
+    delay: 0.12,
+    stagger: 0.05
+  });
   gsap.set(fadeInItems, { opacity: 0 });
-  gsap.to(fadeInItems, { duration: 0.8, ease: 'none', opacity: 1, delay: 3.2 });
+  gsap.to(fadeInItems, { duration: 0.45, ease: 'none', opacity: 1, delay: 0.48 });
 }
 // --------------------------------------------- //
 // Loader & Loading Animation End
@@ -1494,16 +1496,18 @@ $(".btn-to-top").each(function() {
 // ------------------------------------------------------------------------------ //
 // Parallax Universal (apply parallax effect to any element with a data-speed attribute) Start
 // ------------------------------------------------------------------------------ //
-gsap.to("[data-speed]", {
-  y: (i, el) => (1 - parseFloat(el.getAttribute("data-speed"))) * ScrollTrigger.maxScroll(window) ,
-  ease: "none",
-  scrollTrigger: {
-    start: 0,
-    end: "max",
-    invalidateOnRefresh: true,
-    scrub: 0
-  }
-});
+if (document.querySelector('[data-speed]')) {
+  gsap.to("[data-speed]", {
+    y: (i, el) => (1 - parseFloat(el.getAttribute("data-speed"))) * ScrollTrigger.maxScroll(window),
+    ease: "none",
+    scrollTrigger: {
+      start: 0,
+      end: "max",
+      invalidateOnRefresh: true,
+      scrub: 0
+    }
+  });
+}
 // --------------------------------------------- //
 // Parallax Universal End
 // --------------------------------------------- //
