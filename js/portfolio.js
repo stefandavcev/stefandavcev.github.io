@@ -34,8 +34,10 @@
   document.querySelectorAll('.btn-anim').forEach((button) => {
     if (button.hasAttribute('aria-label')) return;
     const caption = button.querySelector('.btn-caption');
-    if (caption && caption.textContent.trim()) {
-      button.setAttribute('aria-label', caption.textContent.trim());
+    const animatedCaption = caption && caption.querySelector('.btn-anim__block');
+    const label = (animatedCaption || caption)?.textContent.trim();
+    if (label) {
+      button.setAttribute('aria-label', label);
     }
   });
 
