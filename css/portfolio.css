@@ -605,7 +605,7 @@
 
 .sd-insight img {
     width: 100%;
-    aspect-ratio: 4/3;
+    aspect-ratio: 40/21;
     object-fit: cover;
     display: block;
 }
@@ -2312,18 +2312,63 @@ textarea:focus-visible {
 
 /* Services page visual refresh. */
 .sd-selected-work-visual {
+    position: relative;
+    isolation: isolate;
     overflow: hidden;
     border-radius: 3rem;
-    background: var(--base-tint);
+    background:
+        radial-gradient(circle at 14% 18%, rgba(126,82,255,.98) 0, rgba(126,82,255,.46) 18%, transparent 42%),
+        radial-gradient(circle at 84% 76%, rgba(0,174,255,.86) 0, rgba(0,174,255,.3) 22%, transparent 46%),
+        radial-gradient(circle at 68% 16%, rgba(255,45,132,.54) 0, transparent 34%),
+        linear-gradient(135deg,#050509 0%,#101329 42%,#080811 68%,#030306 100%);
 }
 
-.sd-selected-work-visual img {
-    display: block;
+.sd-selected-work-visual::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 7%;
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 38% 35%,rgba(255,255,255,.18),transparent 34%),
+        linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.015));
+    box-shadow:
+        0 0 9rem rgba(111,68,255,.34),
+        inset 0 0 7rem rgba(255,255,255,.035);
+    filter: blur(.1px);
+    transform: rotate(-8deg) scale(1.08);
+}
+
+.sd-selected-work-visual::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    opacity: .22;
+    background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+    background-size: clamp(5rem,7vw,10rem) clamp(5rem,7vw,10rem);
+    -webkit-mask-image: radial-gradient(circle at center,#000 0%,rgba(0,0,0,.68) 45%,transparent 84%);
+    mask-image: radial-gradient(circle at center,#000 0%,rgba(0,0,0,.68) 45%,transparent 84%);
+}
+
+.sd-selected-work-visual + .mxd-divider__trigger {
+    z-index: 3;
+}
+
+/* Article artwork is authored in a wide 1200×630 format; preserve it everywhere. */
+.mxd-blog-preview__media,
+.mxd-blog-preview__image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    filter: saturate(.92) contrast(1.03);
+    height: auto !important;
+    aspect-ratio: 40/21;
+}
+
+.mxd-blog-preview__image {
+    background-position: center;
+    background-size: cover;
 }
 
 .mxd-services-list .hover-reveal__content {
