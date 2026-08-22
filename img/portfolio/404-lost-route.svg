@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Route not found</title>
+  <desc id="desc">A modern dark abstract map with a glowing route that ends before reaching its destination.</desc>
+  <defs>
+    <linearGradient id="panel" x1="100" y1="70" x2="1090" y2="830" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16192A"/>
+      <stop offset=".52" stop-color="#090A11"/>
+      <stop offset="1" stop-color="#030306"/>
+    </linearGradient>
+    <linearGradient id="route" x1="180" y1="700" x2="1030" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7E52FF"/>
+      <stop offset=".52" stop-color="#B74CFF"/>
+      <stop offset="1" stop-color="#00AEFF"/>
+    </linearGradient>
+    <radialGradient id="violetGlow" cx="0" cy="0" r="1" gradientTransform="translate(300 265) rotate(38) scale(430 360)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7E52FF" stop-opacity=".78"/>
+      <stop offset="1" stop-color="#7E52FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blueGlow" cx="0" cy="0" r="1" gradientTransform="translate(930 620) rotate(-135) scale(370 300)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00AEFF" stop-opacity=".62"/>
+      <stop offset="1" stop-color="#00AEFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="76" height="76" patternUnits="userSpaceOnUse">
+      <path d="M76 0H0V76" fill="none" stroke="#FFFFFF" stroke-opacity=".075"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="32" flood-color="#000000" flood-opacity=".34"/>
+    </filter>
+    <filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="13"/>
+    </filter>
+    <clipPath id="clip">
+      <rect x="70" y="70" width="1060" height="760" rx="76"/>
+    </clipPath>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="70" width="1060" height="760" rx="76" fill="url(#panel)"/>
+  </g>
+  <g clip-path="url(#clip)">
+    <rect x="70" y="70" width="1060" height="760" fill="url(#violetGlow)"/>
+    <rect x="70" y="70" width="1060" height="760" fill="url(#blueGlow)"/>
+    <rect x="70" y="70" width="1060" height="760" fill="url(#grid)"/>
+    <ellipse cx="635" cy="430" rx="455" ry="270" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="2" transform="rotate(-8 635 430)"/>
+    <ellipse cx="635" cy="430" rx="338" ry="196" fill="none" stroke="#FFFFFF" stroke-opacity=".055" stroke-width="2" transform="rotate(-8 635 430)"/>
+  </g>
+
+  <g fill="none" stroke-linecap="round">
+    <path d="M175 691C290 610 347 492 455 505C554 517 558 610 666 548" stroke="#7E52FF" stroke-opacity=".32" stroke-width="30" filter="url(#softGlow)"/>
+    <path d="M175 691C290 610 347 492 455 505C554 517 558 610 666 548" stroke="url(#route)" stroke-width="12"/>
+    <path d="M745 493C836 419 876 291 1014 246" stroke="#00AEFF" stroke-opacity=".3" stroke-width="30" filter="url(#softGlow)"/>
+    <path d="M745 493C836 419 876 291 1014 246" stroke="url(#route)" stroke-width="12" stroke-dasharray="18 18"/>
+  </g>
+
+  <g>
+    <circle cx="175" cy="691" r="25" fill="#090A11" stroke="#7E52FF" stroke-width="9"/>
+    <circle cx="455" cy="505" r="14" fill="#B74CFF"/>
+    <circle cx="455" cy="505" r="30" fill="#B74CFF" opacity=".16"/>
+    <circle cx="1014" cy="246" r="34" fill="#090A11" stroke="#00AEFF" stroke-width="9"/>
+    <circle cx="1014" cy="246" r="9" fill="#00AEFF"/>
+  </g>
+
+  <g transform="translate(706 520) rotate(-12)">
+    <circle r="56" fill="#FF3F8D" opacity=".12"/>
+    <path d="M-18-18L18 18M18-18L-18 18" stroke="#FF5D9F" stroke-width="12" stroke-linecap="round"/>
+  </g>
+
+  <g fill="#FFFFFF">
+    <text x="145" y="180" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" letter-spacing="7" opacity=".64">ROUTE NOT FOUND</text>
+    <text x="145" y="385" font-family="Arial, Helvetica, sans-serif" font-size="210" font-weight="800" letter-spacing="-18" opacity=".08">404</text>
+  </g>
+  <circle cx="1018" cy="164" r="7" fill="#00AEFF"/>
+  <circle cx="1045" cy="164" r="7" fill="#B74CFF"/>
+  <circle cx="1072" cy="164" r="7" fill="#FF5D9F"/>
+</svg>
