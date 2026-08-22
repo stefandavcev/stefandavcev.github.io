@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#120f0d"/><stop offset="1" stop-color="#33201a"/></linearGradient><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ef714a"/><stop offset="1" stop-color="#8d2f2e"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="24" stdDeviation="30" flood-opacity=".4"/></filter></defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <circle cx="1050" cy="100" r="260" fill="#ef714a" opacity=".08"/>
+  <rect x="120" y="115" width="960" height="670" rx="38" fill="#f5eee5" filter="url(#s)"/>
+  <g transform="translate(600 366)"><path d="M-130-35c80-122 208-96 260 8-49 123-181 163-260-8Z" fill="url(#a)"/><circle cx="-35" cy="-32" r="24" fill="#552424"/><circle cx="28" cy="24" r="20" fill="#66885b"/><circle cx="75" cy="-36" r="18" fill="#e5b84f"/></g>
+  <text x="600" y="575" text-anchor="middle" font-family="Arial,sans-serif" font-size="78" font-weight="800" letter-spacing="3" fill="#17120f">SEVEN FUSION</text>
+  <text x="600" y="625" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" letter-spacing="7" fill="#8d2f2e">RESTAURANT · VISUAL IDENTITY</text>
+  <text x="145" y="835" font-family="Arial,sans-serif" font-size="18" letter-spacing="3" fill="#ef714a">LOGO DESIGN</text>
+</svg>
