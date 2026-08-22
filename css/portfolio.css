@@ -652,14 +652,28 @@
     padding: 14rem 0 8rem;
 }
 
+.sd-404__layout {
+    display: grid;
+    grid-template-columns: minmax(0,1.08fr) minmax(36rem,.92fr);
+    align-items: center;
+    gap: clamp(4rem,7vw,10rem);
+}
+
+.sd-404__content {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
 .sd-404__num {
-    font-size: clamp(12rem,30vw,44rem);
-    line-height: .65;
+    font-size: clamp(12rem,19vw,28rem);
+    line-height: .7;
     letter-spacing: -.08em;
 }
 
 .sd-404 h1 {
-    font-size: clamp(4rem,7vw,9rem);
+    max-width: 76rem;
+    font-size: clamp(4rem,5.3vw,7.4rem);
     line-height: .95;
     margin: 4rem 0 2rem;
 }
@@ -669,6 +683,30 @@
     color: var(--t-medium);
     max-width: 65rem;
     margin-bottom: 3rem;
+}
+
+.sd-404__visual {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.sd-404__visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 3rem 4rem rgba(22,22,22,.18));
+}
+
+@media (max-width:991px){
+    .sd-404__layout {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+
+    .sd-404__visual {
+        width: min(100%,68rem);
+    }
 }
 
 @media (max-width:991px){
