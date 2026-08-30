@@ -397,6 +397,20 @@
     height: auto;
 }
 
+.sd-project-hero-image--brand {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background: #191919;
+}
+
+.sd-project-hero-image--brand img {
+    width: auto;
+    max-width: 78%;
+    max-height: 78%;
+    object-fit: contain;
+}
+
 .sd-project-meta {
     display: grid;
     grid-template-columns: repeat(4,1fr);
@@ -2324,6 +2338,11 @@ textarea:focus-visible {
     background: var(--base);
     color: var(--t-medium);
     font-size: 1.4rem;
+}
+
+.sd-project-gallery figcaption a {
+    color: var(--t-bright);
+    text-underline-offset: .25em;
 }
 
 .sd-form-note a {
