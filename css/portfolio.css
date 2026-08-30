@@ -1159,6 +1159,10 @@
     white-space: nowrap;
 }
 
+.hero-09-headline__caption p span {
+    display: block;
+}
+
 .sd-cta h2 {
     color: #929292;
 }
@@ -1187,8 +1191,8 @@
     }
 
     .hero-09-headline__caption p {
-        white-space: normal;
-        font-size: 1.8rem;
+        white-space: nowrap;
+        font-size: clamp(1.25rem, 3.85vw, 1.8rem);
         line-height: 1.35;
     }
 
@@ -2156,7 +2160,7 @@
     }
 
     .mxd-hero-09__headline > .hero-09-headline__caption {
-        max-width: 68rem;
+        max-width: 92rem;
         margin-bottom: 2.2rem;
     }
 
@@ -2164,7 +2168,7 @@
         font-size: clamp(2.8rem, 2.25vw, 3.6rem);
         line-height: 1.13;
         letter-spacing: -.025em;
-        white-space: normal;
+        white-space: nowrap;
     }
 
     .mxd-hero-09__headline > .hero-09-headline__title {
