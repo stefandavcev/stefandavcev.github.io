@@ -2570,3 +2570,29 @@ textarea:focus-visible {
         max-height: 48rem;
     }
 }
+
+/* One heading split across two visual lines */
+.sd-line {
+    display: block;
+}
+
+/* Skip link: hidden until focused with the keyboard */
+.sd-skip-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10000;
+    padding: 1rem 1.6rem;
+    border-radius: 10rem;
+    background: var(--t-bright, #161616);
+    color: var(--base, #fff);
+    font-size: 1.6rem;
+    transform: translateY(-200%);
+    transition: transform .2s ease;
+}
+.sd-skip-link:focus {
+    transform: translateY(0);
+}
+#mxd-page-content:focus {
+    outline: none;
+}
