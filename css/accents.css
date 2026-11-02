@@ -1,0 +1,158 @@
+/* ------------------------------------------------ */
+/* Accents: soft brand-coloured light and colour details on top of the base theme.
+   Brand colours from the theme: lilac #9F8BE7 and lime #DDF160. */
+/* ------------------------------------------------ */
+
+:root {
+    --sd-lilac: 159, 139, 231;
+    --sd-lime: 221, 241, 96;
+    /* lilac that stays readable as text on the light background */
+    --sd-lilac-text: #6F57CF;
+    /* highlighted words: lilac on light, lime on dark */
+    --sd-hl: #6F57CF;
+    --sd-glow-lilac: .20;
+    --sd-glow-lime: .22;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([color-scheme=light]) {
+        --sd-lilac-text: #B9A9F2;
+        --sd-hl: #DDF160;
+        --sd-glow-lilac: .34;
+        --sd-glow-lime: .13;
+    }
+}
+
+[color-scheme=dark] {
+    --sd-lilac-text: #B9A9F2;
+    --sd-hl: #DDF160;
+    --sd-glow-lilac: .34;
+    --sd-glow-lime: .13;
+}
+
+/* ================================================ */
+/* Aura: soft light behind key sections            */
+/* ================================================ */
+.mxd-hero-09,
+.mxd-block__manifest,
+.sd-page-hero,
+.mxd-section-inner-headline,
+.mxd-footer {
+    position: relative;
+    isolation: isolate;
+}
+
+.mxd-hero-09::before,
+.mxd-pinned-projects__static-inner::before,
+.mxd-block__manifest::before,
+.sd-page-hero::before,
+.mxd-section-inner-headline::before,
+.mxd-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Home hero: lilac light around the portrait, a hint of lime under the name */
+.mxd-hero-09::before {
+    background:
+        radial-gradient(circle 560px at 88% 16%, rgba(var(--sd-lilac), var(--sd-glow-lilac)), transparent 72%),
+        radial-gradient(circle 460px at 52% 30%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .7)), transparent 72%),
+        radial-gradient(circle 420px at 4% 100%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent 70%);
+}
+
+/* Selected projects: light behind the pinned title.
+   The title column is position: sticky on wide screens, which already anchors the glow. */
+.mxd-pinned-projects__static-inner {
+    isolation: isolate;
+}
+@media only screen and (max-width: 1199px) {
+    .mxd-pinned-projects__static-inner {
+        position: relative;
+    }
+}
+
+
+.mxd-pinned-projects__static-inner::before {
+    background:
+        radial-gradient(circle 380px at 26% 30%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .85)), transparent 72%);
+}
+
+/* Manifest statement: lilac and lime behind the text */
+.mxd-block__manifest::before {
+    top: -25%;
+    bottom: -25%;
+    background:
+        radial-gradient(circle 340px at 32% 50%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%),
+        radial-gradient(circle 300px at 70% 56%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent 72%);
+}
+
+/* Inner page headers (the layer reaches up under the header so the light has no hard top edge) */
+.sd-page-hero::before,
+.mxd-section-inner-headline::before {
+    top: -16rem;
+    bottom: -24rem;
+    background:
+        radial-gradient(circle 520px at 85% 20%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%),
+        radial-gradient(circle 360px at 0% 70%, rgba(var(--sd-lime), calc(var(--sd-glow-lime) * .8)), transparent 70%);
+}
+
+/* Footer: light rising behind the wordmark */
+.mxd-footer::before {
+    background:
+        radial-gradient(circle 520px at 50% 0%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%);
+}
+
+/* ================================================ */
+/* Colour details                                   */
+/* ================================================ */
+
+/* the square dot in the hero wordmark */
+.hero-09-headline__title svg rect {
+    fill: rgb(var(--sd-lilac));
+}
+
+/* second line of the hero caption */
+.hero-09-headline__caption span + span {
+    color: var(--sd-lilac-text);
+}
+
+/* highlighted words: lime in body copy on dark, lilac in headings */
+.sd-hl {
+    color: var(--sd-hl);
+}
+h1 .sd-hl,
+h2 .sd-hl {
+    color: var(--sd-lilac-text);
+}
+
+/* counters in the hero */
+.hero-09-objects__item .mxd-counter__number {
+    color: var(--sd-lilac-text);
+}
+
+/* marquee stars */
+.marquee__image svg {
+    color: rgb(var(--sd-lilac));
+}
+
+/* the dot in the "sd." monogram */
+.btn-rotating__monogram > span {
+    color: rgb(var(--sd-lime));
+}
+
+/* footer wordmark fades into the brand colours */
+.sd-footer-wordmark {
+    background: linear-gradient(100deg, currentColor 8%, rgb(var(--sd-lilac)) 58%, rgb(var(--sd-lime)) 96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* text selection */
+::selection {
+    background: rgb(var(--sd-lime));
+    color: #161616;
+}

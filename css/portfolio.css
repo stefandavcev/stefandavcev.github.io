@@ -2596,3 +2596,209 @@ textarea:focus-visible {
 #mxd-page-content:focus {
     outline: none;
 }
+
+/* ------------------------------------------------ */
+/* Home: "How I work" process section (replaces the parallax image divider) */
+/* ------------------------------------------------ */
+.sd-flow {
+    width: 100%;
+    flex: 1 1 100%;
+}
+.sd-flow__heading {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.sd-flow__circle {
+    flex: 0 0 auto;
+}
+.sd-flow__head {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+}
+.sd-flow__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.4rem;
+    font-size: 1.6rem;
+    color: var(--t-medium);
+}
+.sd-flow__eyebrow::before {
+    content: "";
+    width: .9rem;
+    height: .9rem;
+    border-radius: 50%;
+    background: #DDF160;
+    box-shadow: 0 0 0 4px rgba(221, 241, 96, .18);
+}
+.sd-flow__h2 {
+    max-width: 16ch;
+    font-size: 4.2rem;
+    line-height: 1.05;
+}
+.sd-flow__lead {
+    max-width: 56rem;
+    margin-top: 2.4rem;
+    font-size: 1.8rem;
+    line-height: 1.5;
+    color: var(--t-medium);
+}
+.sd-flow__circle .btn-rotating {
+    width: 160px;
+    height: 160px;
+}
+.sd-flow__steps {
+    list-style: none;
+    margin: 6rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+    counter-reset: none;
+}
+.sd-flow__step {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 30rem;
+    padding: 3rem;
+    border: 1px solid var(--st-muted);
+    border-radius: var(--_radius-l);
+    background: var(--base-tint);
+    transition: transform var(--_animspeed-medium) ease, border-color var(--_animspeed-medium) ease;
+}
+.sd-flow__step::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle 260px at 100% 0%, rgba(159, 139, 231, .22), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--_animspeed-slow) ease;
+}
+.no-touch .sd-flow__step:hover {
+    transform: translateY(-6px);
+    border-color: rgba(159, 139, 231, .6);
+}
+.no-touch .sd-flow__step:hover::before {
+    opacity: 1;
+}
+.sd-flow__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+}
+.sd-flow__num {
+    font: normal 600 7.2rem/0.9 var(--_font-accent);
+    letter-spacing: -0.2rem;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--t-muted);
+    transition: color var(--_animspeed-medium) ease, -webkit-text-stroke-color var(--_animspeed-medium) ease;
+}
+.no-touch .sd-flow__step:hover .sd-flow__num {
+    color: var(--sd-lilac-text, #9F8BE7);
+    -webkit-text-stroke-color: transparent;
+}
+.sd-flow__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.6rem;
+    height: 5.6rem;
+    border-radius: 50%;
+    font-size: 2.4rem;
+    background: rgba(159, 139, 231, .16);
+    color: var(--sd-lilac-text, #9F8BE7);
+}
+.sd-flow__title {
+    margin-top: auto;
+    font-size: 3.2rem;
+    line-height: 1.1;
+}
+.sd-flow__text {
+    margin-top: 1.2rem;
+    font-size: 1.7rem;
+    line-height: 1.5;
+    color: var(--t-medium);
+}
+.sd-flow__tag {
+    align-self: flex-start;
+    margin-top: 2.4rem;
+    padding: .6rem 1.4rem;
+    border: 1px solid var(--t-muted-extra);
+    border-radius: 10rem;
+    font-size: 1.4rem;
+    color: var(--t-medium);
+}
+
+/* last step: lilac card, the result of the process */
+.sd-flow__step:last-child {
+    border-color: transparent;
+    background: #9F8BE7;
+}
+.sd-flow__step:last-child .sd-flow__title,
+.sd-flow__step:last-child .sd-flow__text {
+    color: #161616;
+}
+.sd-flow__step:last-child .sd-flow__num {
+    -webkit-text-stroke-color: rgba(22, 22, 22, .55);
+}
+.no-touch .sd-flow__step:last-child:hover .sd-flow__num {
+    color: #161616;
+}
+.sd-flow__step:last-child .sd-flow__icon {
+    background: #DDF160;
+    color: #161616;
+}
+.sd-flow__step:last-child .sd-flow__tag {
+    border-color: rgba(22, 22, 22, .3);
+    color: #161616;
+}
+.sd-flow__step:last-child::before {
+    background: radial-gradient(circle 260px at 100% 0%, rgba(221, 241, 96, .45), transparent 70%);
+}
+
+@media only screen and (min-width: 768px) {
+    .sd-flow__h2 {
+        font-size: 6rem;
+    }
+    .sd-flow__steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .sd-flow__step {
+        min-height: 36rem;
+        padding: 3.6rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .sd-flow__head {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+    }
+    .sd-flow__h2 {
+        font-size: 7rem;
+    }
+    .sd-flow__circle .btn-rotating {
+        width: 200px;
+        height: 200px;
+    }
+    .sd-flow__steps {
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 8rem;
+    }
+    .sd-flow__step {
+        min-height: 44rem;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sd-flow__step,
+    .sd-flow__step::before,
+    .sd-flow__num {
+        transition: none;
+    }
+}
