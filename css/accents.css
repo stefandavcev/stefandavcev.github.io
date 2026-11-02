@@ -60,7 +60,7 @@
     background:
         radial-gradient(circle 560px at 88% 16%, rgba(var(--sd-lilac), var(--sd-glow-lilac)), transparent 72%),
         radial-gradient(circle 460px at 52% 30%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .7)), transparent 72%),
-        radial-gradient(circle 420px at 4% 100%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent 70%);
+        radial-gradient(ellipse 460px 240px at 6% 70%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent 72%);
 }
 
 /* Selected projects: light behind the pinned title.
@@ -74,19 +74,20 @@
     }
 }
 
-
+/* The layer is larger than the title block and the light fades out before its
+   edges (closest-side), so it never shows a cut-off rectangle. */
 .mxd-pinned-projects__static-inner::before {
+    inset: -50% -25% -50% -20%;
     background:
-        radial-gradient(circle 380px at 26% 30%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .85)), transparent 72%);
+        radial-gradient(closest-side, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .85)), transparent);
 }
 
 /* Manifest statement: lilac and lime behind the text */
 .mxd-block__manifest::before {
-    top: -25%;
-    bottom: -25%;
+    inset: -45% -12%;
     background:
-        radial-gradient(circle 340px at 32% 50%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%),
-        radial-gradient(circle 300px at 70% 56%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent 72%);
+        radial-gradient(closest-side at 36% 50%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent),
+        radial-gradient(closest-side at 66% 54%, rgba(var(--sd-lime), var(--sd-glow-lime)), transparent);
 }
 
 /* Inner page headers (the layer reaches up under the header so the light has no hard top edge) */
@@ -102,7 +103,7 @@
 /* Footer: light rising behind the wordmark */
 .mxd-footer::before {
     background:
-        radial-gradient(circle 520px at 50% 0%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%);
+        radial-gradient(ellipse 760px 300px at 50% 32%, rgba(var(--sd-lilac), calc(var(--sd-glow-lilac) * .8)), transparent 72%);
 }
 
 /* ================================================ */
