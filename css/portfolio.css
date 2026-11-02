@@ -2610,6 +2610,8 @@ textarea:focus-visible {
 }
 .sd-flow__circle {
     flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
 }
 .sd-flow__head {
     display: flex;
