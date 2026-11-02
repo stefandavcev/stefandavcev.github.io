@@ -2679,11 +2679,13 @@ textarea:focus-visible {
     opacity: 0;
     transition: opacity var(--_animspeed-slow) ease;
 }
-.no-touch .sd-flow__step:hover {
+.no-touch .sd-flow__step:hover,
+.sd-flow__step.is-active {
     transform: translateY(-6px);
     border-color: rgba(159, 139, 231, .6);
 }
-.no-touch .sd-flow__step:hover::before {
+.no-touch .sd-flow__step:hover::before,
+.sd-flow__step.is-active::before {
     opacity: 1;
 }
 .sd-flow__top {
@@ -2699,7 +2701,8 @@ textarea:focus-visible {
     -webkit-text-stroke: 1.5px var(--t-muted);
     transition: color var(--_animspeed-medium) ease, -webkit-text-stroke-color var(--_animspeed-medium) ease;
 }
-.no-touch .sd-flow__step:hover .sd-flow__num {
+.no-touch .sd-flow__step:hover .sd-flow__num,
+.sd-flow__step.is-active .sd-flow__num {
     color: var(--sd-lilac-text, #9F8BE7);
     -webkit-text-stroke-color: transparent;
 }
@@ -2747,7 +2750,8 @@ textarea:focus-visible {
 .sd-flow__step:last-child .sd-flow__num {
     -webkit-text-stroke-color: rgba(22, 22, 22, .55);
 }
-.no-touch .sd-flow__step:last-child:hover .sd-flow__num {
+.no-touch .sd-flow__step:last-child:hover .sd-flow__num,
+.sd-flow__step:last-child.is-active .sd-flow__num {
     color: #161616;
 }
 .sd-flow__step:last-child .sd-flow__icon {
@@ -2801,4 +2805,64 @@ textarea:focus-visible {
     .sd-flow__num {
         transition: none;
     }
+}
+
+/* ------------------------------------------------ */
+/* Mobile polish */
+/* ------------------------------------------------ */
+
+/* Manifest: a highlighted phrase must wrap like normal text
+   (SplitType sets nested elements to inline-block, which kept the whole phrase on one line) */
+.mxd-manifest .sd-hl {
+    display: inline !important;
+}
+
+/* Service cards: wider on phones (16px side gutter instead of 45px) */
+@media only screen and (max-width: 767px) {
+    .padding-stacked-section .stack-wrapper {
+        width: calc(100% + 5.8rem) !important;
+        margin-left: -2.9rem;
+        margin-right: -2.9rem;
+    }
+}
+
+/* Process steps: tapping a card toggles the highlight on touch devices */
+.sd-flow__step {
+    cursor: default;
+}
+html:not(.no-touch) .sd-flow__step {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* AI tools in the About page marquee and approach list: icon instead of a logo image */
+.sd-ai-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 4.6rem;
+    color: var(--sd-lilac-text, #9F8BE7);
+}
+.mxd-tech-stack-cards__icon .sd-ai-icon {
+    width: 7rem;
+    height: 7rem;
+    margin: 0 auto;
+    border-radius: 1.8rem;
+    background: linear-gradient(135deg, #9F8BE7, #DDF160);
+    color: #161616;
+    font-size: 3.6rem;
+}
+@media only screen and (min-width: 768px) {
+    .mxd-tech-stack-cards__icon .sd-ai-icon {
+        width: 9rem;
+        height: 9rem;
+        border-radius: 2.2rem;
+        font-size: 4.4rem;
+    }
+}
+.mxd-approach-list__image .sd-ai-icon {
+    border-radius: 50%;
+    background: rgba(159, 139, 231, .16);
+    font-size: 3.2rem;
 }

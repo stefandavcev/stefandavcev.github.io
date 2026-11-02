@@ -341,3 +341,21 @@
     mobileServicesQuery.addListener(setupServiceStack);
   }
 })();
+
+/* ---------------------------------------------------------------
+   Process steps: on touch devices a tap toggles the highlight
+   (the hover state desktop users get with the mouse)
+   --------------------------------------------------------------- */
+(function () {
+  const steps = Array.from(document.querySelectorAll('.sd-flow__step'));
+  if (!steps.length) return;
+  const isTouch = () => window.matchMedia('(hover: none), (pointer: coarse)').matches || 'ontouchstart' in window;
+  steps.forEach((step) => {
+    step.addEventListener('click', () => {
+      if (!isTouch()) return;
+      const wasActive = step.classList.contains('is-active');
+      steps.forEach((s) => s.classList.remove('is-active'));
+      if (!wasActive) step.classList.add('is-active');
+    });
+  });
+})();
